@@ -3,7 +3,9 @@ package Oving3;
 import java.util.Random;
 import java.util.Date;
 
+@SuppressWarnings("ALL")
 public class QuicksortAsIntended {
+
 
     private static void bytt(int[] t, int i, int j) {
         int k = t[j];
@@ -67,22 +69,10 @@ public class QuicksortAsIntended {
                 (slutt.getTime() - start.getTime()) / runder;
         System.out.println("Millisekund pr. runde: " + tid);
 
-
-        //feil test
-
-        for (int i = 0; i < array.length-2; i++) {
+        for (int i = 0; i < array.length - 2; i++) {
             if (!(array[i + 1] >= array[i])) {
                 System.out.println("feil");
             }
         }
-
-        /*
-        for(int i = 0; i < n; i++){
-            System.out.println(", ");
-            System.out.println(array[i]);
-            }
-    
-        */
-
     }
 }
