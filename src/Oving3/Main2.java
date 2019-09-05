@@ -66,29 +66,30 @@ public class Main2 {
     }
 
     public static void main(String[] args) {
-        Date start = new Date();
-        int runder = 0;
-        double tid;
-        Date slutt;
-        int n = 10000;
 
-        int[] array = RandomArray.generateRandomIntArray(n, 100);
+        for (int j = 1; j < 50; j++) {
+            Date start = new Date();
+            int runder = 0;
+            double tid;
+            Date slutt;
+            int n = 10000;
 
-        int deletall = 2;
+            int[] array = RandomArray.generateRandomIntArray(n, 100);
 
-        do {
-            quicksort(array, 0, n - 1, deletall);
-            slutt = new Date();
-            ++runder;
-        } while (slutt.getTime() - start.getTime() < 1000);
+            do {
+                quicksort(array, 0, n - 1, j);
+                slutt = new Date();
+                ++runder;
+            } while (slutt.getTime() - start.getTime() < 1000);
 
-        tid = (double)
-                (slutt.getTime() - start.getTime()) / runder;
-        System.out.println("Millisekund pr. runde: " + tid);
+            tid = (double)
+                    (slutt.getTime() - start.getTime()) / runder;
+            System.out.println(j+ "Millisekund pr. runde: " + tid);
 
-        for (int i = 0; i < array.length - 1; i++) {
-            if (!(array[i + 1] >= array[i])) {
-                System.out.println("feil");
+            for (int i = 0; i < array.length - 1; i++) {
+                if (!(array[i + 1] >= array[i])) {
+                    System.out.println("feil");
+                }
             }
         }
     }

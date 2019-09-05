@@ -57,7 +57,6 @@ public class QuicksortAsIntended {
             array[i] = rnd.nextInt(1000);
         }
 
-
         do {
             quicksort(array, 0, n - 1);
             slutt = new Date();
