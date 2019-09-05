@@ -67,14 +67,17 @@ public class Main2 {
 
     public static void main(String[] args) {
 
-        for (int j = 1; j < 50; j++) {
+        int n = 100000;
+        int[] Orgarray = RandomArray.generateRandomIntArray(n, 100);
+
+
+        double kortestTid = 10000;
+        for (int j = 1; j < 500; j += 10) {
+            int[] array = Orgarray;
             Date start = new Date();
             int runder = 0;
             double tid;
             Date slutt;
-            int n = 10000;
-
-            int[] array = RandomArray.generateRandomIntArray(n, 100);
 
             do {
                 quicksort(array, 0, n - 1, j);
@@ -84,7 +87,12 @@ public class Main2 {
 
             tid = (double)
                     (slutt.getTime() - start.getTime()) / runder;
-            System.out.println(j+ "Millisekund pr. runde: " + tid);
+
+            if (tid < kortestTid) {
+                kortestTid = tid;
+            }
+
+            System.out.println(j + " - Millisekund pr. runde: " + tid);
 
             for (int i = 0; i < array.length - 1; i++) {
                 if (!(array[i + 1] >= array[i])) {
@@ -92,5 +100,6 @@ public class Main2 {
                 }
             }
         }
+        System.out.println("Kortest tid:" + " " + kortestTid);
     }
 }
