@@ -9,10 +9,11 @@ public class Main {
     public static void main(String[] args) {
 
         Random rd = new Random(); // creating Random object
-        int[] testArr = new int[10];
+        int[] testArr = new int[1000];
         for (int i = 0; i < testArr.length; i++) {
             testArr[i] = rd.nextInt(20)-10;
         }
+
 
         Date start = new Date();
         int runder = 0;
