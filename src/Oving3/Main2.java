@@ -22,7 +22,7 @@ public class Main2 {
 
     private static int splitt(int[] t, int v, int h) {
         int iv, ih;
-        int m = insertionSort(t, v, h);
+        int m = Median3Sort(t, v, h);
         int dv = t[m];
         bytt(t, m, h - 1);
         for (iv = v, ih = h - 1; ; ) {
@@ -35,7 +35,7 @@ public class Main2 {
         return iv;
     }
 
-    private static int insertionSort(int[] t, int v, int h) {
+    private static void insertionSort(int[] t, int v, int h) {
         for (int j = v+1; j <= h; j++) {
             int swap = t[j];
             int i = j - 1;
@@ -45,7 +45,17 @@ public class Main2 {
             }
             t[i + 1] = swap;
         }
-        return (v + h) / 2;
+
+    }
+
+    private static int Median3Sort(int[] t, int v, int h){
+        int m = (v+h)/2;
+        if(t[v]>t[m]) bytt(t,v,m);
+        if(t[m]>t[h]){
+            bytt(t,m,h);
+            if(t[v]>t[m]) bytt(t,v,m);
+        }
+        return m;
     }
 
     private static boolean checkIfSorted(int[] array) {
@@ -57,32 +67,38 @@ public class Main2 {
         return true;
     }
 
+    private static int[] copyTable(int[] tabell){
+        int[] copy = new int[tabell.length];
+        for(int i = 0; i<tabell.length; i++){
+            copy[i] = tabell[i];
+        }
+        return copy;
+    }
+
 
     public static void main(String[] args) {
 
         int n = 100000;
-        int[] Orgarray = RandomArray.generateRandomIntArray(n, 100000);
+        int[] Orgarray = Oving3.RandomArray.generateRandomIntArray(n, 100000);
+
+        int kortestTidDeletall = 0;
+        double kortestTid = 10000;
+
         int[] array;
 
-        int deletall;
-        double kortestTid = 10000;
-        int kortestTidDeletall = 1;
 
-        for (deletall = 2; deletall <= 1000; deletall += 50) {
+        for (int deletall = 1; deletall < 10000; deletall +=100) {
             Date start = new Date();
             int runder = 0;
             double tid;
             Date slutt;
 
             do {
-                array = Orgarray;
-                System.out.println(checkIfSorted(array));
-
+                array = copyTable(Orgarray);
                 quicksort(array, 0, n - 1, deletall);
                 slutt = new Date();
                 ++runder;
-                array = null;
-            } while (slutt.getTime() - start.getTime() < 2000);
+            } while (slutt.getTime() - start.getTime() < 1000);
             tid = (double)
                     (slutt.getTime() - start.getTime()) / runder;
 

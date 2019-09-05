@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
 
         Random rd = new Random(); // creating Random object
-        int[] testArr = new int[1000];
+        int[] testArr = new int[15];
         for (int i = 0; i < testArr.length; i++) {
             testArr[i] = rd.nextInt(20)-10;
         }
