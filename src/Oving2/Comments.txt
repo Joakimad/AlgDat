@@ -1,0 +1,20 @@
+
+Algoritmen i oppgave 1 inneholder flere rekursive kall enn den i oppgave 2.
+
+
+ Oppgave 1 er lineær.
+ Oppgave 2 er logaritmisk.
+
+
+
+
+
+
+
+
+
+
+ T (n) = aT (n/b) + cnk
+ a = antall rekursive kall
+ b = brøkdelen av datasettet vi behandler i et rekursivt kall
+ cnk = kompleksitet (løkker)
