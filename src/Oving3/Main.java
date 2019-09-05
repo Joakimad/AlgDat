@@ -3,7 +3,7 @@ package Oving3;
 import java.util.Date;
 import java.util.Random;
 
-public class MainRename {
+public class Main {
 
 
     public static void main(String[] args) {
