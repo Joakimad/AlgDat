@@ -45,7 +45,6 @@ public class Main2 {
             }
             t[i + 1] = swap;
         }
-
     }
 
     private static int Median3Sort(int[] t, int v, int h){
@@ -86,7 +85,7 @@ public class Main2 {
 
         int[] array;
 
-
+        //Best deletall = 71?
         for (int deletall = 65; deletall < 85; deletall +=1) {
             Date start = new Date();
             int runder = 0;
@@ -116,7 +115,5 @@ public class Main2 {
             }
         }
         System.out.println("Kortest tid - Deletall:" + kortestTidDeletall + " Tid: " + kortestTid);
-
-
     }
 }
