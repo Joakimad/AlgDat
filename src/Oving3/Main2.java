@@ -48,21 +48,13 @@ public class Main2 {
         for (int j = v; j <= h; j++) {
             int swap = t[j];
             int i = j - 1;
-            while (i >= 0 && t[i] > swap) {
+            while (i >= v && t[i] > swap) {
                 t[i + 1] = t[i];
                 i--;
             }
             t[i + 1] = swap;
         }
-
-        //Median3Sort
-        int m = (v + h) / 2;
-        if (t[v] > t[m]) bytt(t, v, m);
-        if (t[m] > t[h]) {
-            bytt(t, m, h);
-            if (t[v] > t[m]) bytt(t, v, m);
-        }
-        return m;
+        return (v + h) / 2;
     }
 
     public static void main(String[] args) {
@@ -70,9 +62,11 @@ public class Main2 {
         int n = 100000;
         int[] Orgarray = RandomArray.generateRandomIntArray(n, 100);
 
-
+        int deletall;
         double kortestTid = 10000;
-        for (int j = 1; j < 500; j += 10) {
+        int kortestTidDeletall = 1;
+
+        for (deletall = 2; deletall < 1000; deletall += 50) {
             int[] array = Orgarray;
             Date start = new Date();
             int runder = 0;
@@ -80,19 +74,20 @@ public class Main2 {
             Date slutt;
 
             do {
-                quicksort(array, 0, n - 1, j);
+                quicksort(array, 0, n - 1, deletall);
                 slutt = new Date();
                 ++runder;
-            } while (slutt.getTime() - start.getTime() < 1000);
+            } while (slutt.getTime() - start.getTime() < 2000);
 
             tid = (double)
                     (slutt.getTime() - start.getTime()) / runder;
 
             if (tid < kortestTid) {
                 kortestTid = tid;
+                kortestTidDeletall = deletall;
             }
 
-            System.out.println(j + " - Millisekund pr. runde: " + tid);
+            System.out.println(deletall + " - Millisekund pr. runde: " + tid);
 
             for (int i = 0; i < array.length - 1; i++) {
                 if (!(array[i + 1] >= array[i])) {
@@ -100,6 +95,6 @@ public class Main2 {
                 }
             }
         }
-        System.out.println("Kortest tid:" + " " + kortestTid);
+        System.out.println("Kortest tid - Deletall:" + kortestTidDeletall + " Tid: " + kortestTid);
     }
 }
