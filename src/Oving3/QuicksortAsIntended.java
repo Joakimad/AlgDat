@@ -6,7 +6,6 @@ import java.util.Date;
 @SuppressWarnings("ALL")
 public class QuicksortAsIntended {
 
-
     private static void bytt(int[] t, int i, int j) {
         int k = t[j];
         t[j] = t[i];
@@ -58,7 +57,6 @@ public class QuicksortAsIntended {
         for (int i = 0; i < n; i++) {
             array[i] = rnd.nextInt(1000);
         }
-
         do {
             quicksort(array, 0, n - 1);
             slutt = new Date();
