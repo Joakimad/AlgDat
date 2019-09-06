@@ -1,5 +1,7 @@
 package Oving3;
 
+import com.sun.tools.corba.se.idl.constExpr.Or;
+
 import java.util.Date;
 
 @SuppressWarnings("ALL")
@@ -77,25 +79,41 @@ public class Main2 {
 
     public static void main(String[] args) {
 
-        int n = 100000;
-        int[] Orgarray = Oving3.RandomArray.generateRandomIntArray(n, 100000);
+        int n = 1000000;
+        int[] Orgarray = Oving3.RandomArray.generateRandomIntArray(n, 1000000);
 
         int kortestTidDeletall = 0;
         double kortestTid = 10000;
 
         int[] array;
 
+        long sumFør = 0;
+        for (int i = 0; i < Orgarray.length; i++) {
+            sumFør += Orgarray[i];
+        }
+
         //Kortest results: 71 - 77
-        for (int deletall = 65; deletall < 85; deletall +=1) {
+        for (int deletall = 70; deletall < 80; deletall +=1) {
             Date start = new Date();
             int runder = 0;
             double tid;
             Date slutt;
 
+            long sumEtter = 0;
             do {
                 array = copyTable(Orgarray);
                 quicksort(array, 0, n - 1, deletall);
                 slutt = new Date();
+
+                for (int i = 0; i < Orgarray.length; i++) {
+                    sumEtter += Orgarray[i];
+                }
+
+                if(sumEtter != sumFør) {
+                    System.out.println("Not the same");
+                }
+                sumEtter = 0;
+
                 ++runder;
             } while (slutt.getTime() - start.getTime() < 5000);
             tid = (double)
