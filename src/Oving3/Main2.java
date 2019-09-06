@@ -85,7 +85,7 @@ public class Main2 {
 
         int[] array;
 
-        //Best deletall = 71?
+        //Kortest results: 71 - 77
         for (int deletall = 65; deletall < 85; deletall +=1) {
             Date start = new Date();
             int runder = 0;
