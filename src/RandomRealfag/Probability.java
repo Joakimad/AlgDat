@@ -1,4 +1,6 @@
-package RandomMatte;
+package RandomRealfag;
+
+import java.util.Arrays;
 
 public class Probability {
 
@@ -23,12 +25,14 @@ public class Probability {
         return Math.sqrt(findVariance(values,probability));
     }
 
-    public double findDistributionFunction(double[] values, double[] probability, double x) {
-        double[] function = new double[values.length];
-        for (int i = 1; i < values.length; i++) {
-            function[i] = (values[i] * probability[i]) + (values[i-1] * probability[i-1]);
+    public double findDistributionFunction(double[] values, double[] probability, double low, double high) {
+
+        double sum = 0;
+
+        for (int i = Arrays.binarySearch(values,low); i <= Arrays.binarySearch(values,high); i++) {
+            sum += probability[i];
         }
-        return 0;
+        return sum;
     }
 
 }
