@@ -78,7 +78,7 @@ public class Main2 {
 
     public static void main(String[] args) {
 
-        int n = 100000;
+        int n = 1000000;
         int[] Orgarray = Oving3.RandomArray.generateRandomIntArray(n, 100000);
 
         int kortestTidDeletall = 0;
