@@ -20,7 +20,7 @@ public class Comparison {
         } while (slutt.getTime() - start.getTime() < 1000);
         tid = (double)
                 (slutt.getTime() - start.getTime()) / runder;
-        System.out.println("Opg1 - Millisekund pr. runde:" + tid + " - runder: " + runder);
+        System.out.println("Oving4.Opg1 - Millisekund pr. runde:" + tid + " - runder: " + runder);
 
         start = new Date();
         runder = 0;
