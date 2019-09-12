@@ -15,9 +15,6 @@ public class Josepheus {
         }
         cll.display();
 
-        for (int i = 1; i < intervall; i++) {
-
-        }
 
     }
 

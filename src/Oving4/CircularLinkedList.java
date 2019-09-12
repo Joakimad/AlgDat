@@ -26,6 +26,11 @@ public class CircularLinkedList {
         }
     }
 
+    public void remove(int index) {
+
+
+    }
+
     //Displays all the nodes in the list
     public void display() {
         Node current = head;
@@ -37,6 +42,26 @@ public class CircularLinkedList {
                 //Prints each node by incrementing pointer.
                 System.out.print(" " + current.data);
                 current = current.next;
+            } while (current != head);
+            System.out.println();
+        }
+    }
+
+    public void killSoldiers(int intervall) {
+        Node current = head;
+        if (head == null) {
+            System.out.println("List is empty");
+        } else {
+            System.out.println("Nodes of the circular linked list: ");
+            do {
+                //Prints each node by incrementing pointer.
+                System.out.print(" " + current.data);
+
+                for (int i = 0; i < intervall; i++) {
+                    current = current.next;
+                }
+
+
             } while (current != head);
             System.out.println();
         }
