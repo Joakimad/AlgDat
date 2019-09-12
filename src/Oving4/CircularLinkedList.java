@@ -25,11 +25,36 @@ public class CircularLinkedList {
             tail.next = head;
         }
     }
-
-    public Node remove(int key) {
-        if (head == null) {
-           return null;
+    public void deleteEnd() {
+        //Checks whether list is empty
+        if(head == null) {
+            return;
         }
+        else {
+            //Checks whether contain only one element
+            if(head != tail ) {
+                Node current = head;
+                //Loop will iterate till the second last element as current.next is pointing to tail
+                while(current.next != tail) {
+                    current = current.next;
+                }
+                //Second last element will be new tail
+                tail = current;
+                //Tail will point to head as it is a circular linked list
+                tail.next = head;
+            }
+            //If the list contains only one element
+            //Then it will remove it and both head and tail will point to null
+            else {
+                head = tail = null;
+            }
+        }
+    }
+    public void remove(int key) {
+        if (head == null) {
+           head = null;
+        }
+
         // Find the required node
         Node curr = head, prev = new Node(0);
         while (curr.data != key) {
@@ -43,9 +68,8 @@ public class CircularLinkedList {
         }
 
         // Check if node is only node
-        if (curr.next == head) {
-            head = null;
-            return head;
+        if (head == tail) {
+            head = tail = null;
         }
 
         // If more than one node, check if
@@ -64,7 +88,10 @@ public class CircularLinkedList {
         } else {
             prev.next = curr.next;
         }
-        return head;
+
+        if (curr.next == tail) {
+            tail = curr;
+        }
     }
 
     //Displays all the nodes in the list
@@ -91,12 +118,10 @@ public class CircularLinkedList {
             do {
                 for (int i = 0; i < intervall; i++) {
                     current = current.next;
-                    System.out.println("Current: " + current.getData());
                 }
-                System.out.println("Removing: " + current.getData());
-                head = remove(current.getData());
+                System.out.println("Removing: " + current.getData()+"\n");
+                remove(current.getData());
                 display();
-                System.out.println(head.data + " - " + tail.data);
             } while (sizeOfList() > 1);
         }
     }
@@ -113,6 +138,8 @@ public class CircularLinkedList {
         }
         return length;
     }
+
+
 }
 
 

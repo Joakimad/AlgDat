@@ -18,7 +18,7 @@ public class Josepheus {
         cll.display();
 
         System.out.println("Killing soldiers");
-        cll.killSoldiers(2);
+        cll.killSoldiers(intervall);
 
         //Display the new list
         cll.display();
