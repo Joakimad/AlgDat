@@ -26,10 +26,10 @@ public class CircularLinkedList {
         }
     }
 
-    public void remove(int key) {
+    public Node remove(int key) {
         if (head == null) {
+           return null;
         }
-
         // Find the required node
         Node curr = head, prev = new Node(0);
         while (curr.data != key) {
@@ -45,6 +45,7 @@ public class CircularLinkedList {
         // Check if node is only node
         if (curr.next == head) {
             head = null;
+            return head;
         }
 
         // If more than one node, check if
@@ -63,6 +64,7 @@ public class CircularLinkedList {
         } else {
             prev.next = curr.next;
         }
+        return head;
     }
 
     //Displays all the nodes in the list
@@ -82,23 +84,35 @@ public class CircularLinkedList {
     }
 
     public void killSoldiers(int intervall) {
-        Node current = head;
+        Node current = tail;
         if (head == null) {
             System.out.println("List is empty");
         } else {
-            System.out.println("Nodes of the circular linked list: ");
             do {
-                //Prints each node by incrementing pointer.
-                System.out.print(" " + current.data);
-
                 for (int i = 0; i < intervall; i++) {
                     current = current.next;
+                    System.out.println("Current: " + current.getData());
                 }
-
-
-            } while (current != head);
-            System.out.println();
+                System.out.println("Removing: " + current.getData());
+                head = remove(current.getData());
+                display();
+                System.out.println(head.data + " - " + tail.data);
+            } while (sizeOfList() > 1);
         }
     }
+
+    public int sizeOfList() {
+        int length = 1;
+        if (head == null) {
+            return 0;
+        }
+        Node temp = head.getNext();
+        while (temp != head) {
+            temp = temp.getNext();
+            length++;
+        }
+        return length;
+    }
 }
+
 
