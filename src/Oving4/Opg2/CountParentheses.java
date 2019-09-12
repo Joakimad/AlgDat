@@ -7,6 +7,15 @@ public class CountParentheses {
 
     public static void main(String[] args) {
 
+        final int openCurlyBrackets = 123;
+        final int closedCurlyBrackets = 125;
+
+        final int openBrackets = 133;
+        final int closedBrackets = 135;
+
+        final int openParenthesis = 40;
+        final int closedParenthesis = 41;
+
         Stack<Integer> stack = new Stack<Integer>();
 
         String codeBlock = "";
@@ -18,25 +27,30 @@ public class CountParentheses {
 
         for (int i = 0; i < codeBlock.length(); i++) {
 
-            int openCurlyBrackets = 123;
-            int closedCurlyBrackets = 125;
+            int current = (int)codeBlock.charAt(i);
 
-            int openBrackets = 133;
-            int closedBrackets = 135;
-
-            int openParenthesis = 40;
-            int closedParenthesis = 41;
-
-            if (codeBlock.charAt(i) == openBrackets ||
-                    codeBlock.charAt(i) == openCurlyBrackets  ||
-                    codeBlock.charAt(i) == openParenthesis) {
-                stack.push((int) codeBlock.charAt(i));
-            }
-
-            if (codeBlock.charAt(i) == closedBrackets ||
-                    codeBlock.charAt(i) == closedCurlyBrackets  ||
-                    codeBlock.charAt(i) == closedParenthesis) {
-                stack.pop();
+            switch (current) {
+                case openBrackets:
+                case openCurlyBrackets:
+                case openParenthesis:
+                    stack.push(current);
+                    break;
+                case closedBrackets:
+                    if (stack.peek() == openBrackets) {
+                        stack.pop();
+                    }
+                    break;
+                case closedCurlyBrackets:
+                    if (stack.peek() == openCurlyBrackets) {
+                        stack.pop();
+                    }
+                    break;
+                case closedParenthesis:
+                    if (stack.peek() == openParenthesis) {
+                        stack.pop();
+                    }
+                    break;
+                default:
             }
         }
         if (stack.empty()) {
@@ -59,3 +73,4 @@ public class CountParentheses {
         return content.toString();
     }
 }
+
