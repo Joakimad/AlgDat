@@ -13,9 +13,14 @@ public class Josepheus {
         for (int i = 1; i <= soldiers; i++) {
             cll.add(i);
         }
+
+        //Display the original
+        cll.display();
+
+
+        //Display the new list
         cll.display();
 
 
     }
-
 }

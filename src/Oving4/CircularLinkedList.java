@@ -26,9 +26,43 @@ public class CircularLinkedList {
         }
     }
 
-    public void remove(int index) {
+    public void remove(int key) {
+        if (head == null) {
+        }
 
+        // Find the required node
+        Node curr = head, prev = new Node(0);
+        while (curr.data != key) {
+            if (curr.next == head) {
+                System.out.printf("\nGiven node is not found"
+                        + " in the list!!!");
+                break;
+            }
+            prev = curr;
+            curr = curr.next;
+        }
 
+        // Check if node is only node
+        if (curr.next == head) {
+            head = null;
+        }
+
+        // If more than one node, check if
+        // it is first node
+        if (curr == head) {
+            prev = head;
+            while (prev.next != head)
+                prev = prev.next;
+            head = curr.next;
+            prev.next = head;
+        }
+
+        // check if node is last node
+        else if (curr.next == head) {
+            prev.next = head;
+        } else {
+            prev.next = curr.next;
+        }
     }
 
     //Displays all the nodes in the list
