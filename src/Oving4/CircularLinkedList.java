@@ -25,34 +25,10 @@ public class CircularLinkedList {
             tail.next = head;
         }
     }
-    public void deleteEnd() {
-        //Checks whether list is empty
-        if(head == null) {
-            return;
-        }
-        else {
-            //Checks whether contain only one element
-            if(head != tail ) {
-                Node current = head;
-                //Loop will iterate till the second last element as current.next is pointing to tail
-                while(current.next != tail) {
-                    current = current.next;
-                }
-                //Second last element will be new tail
-                tail = current;
-                //Tail will point to head as it is a circular linked list
-                tail.next = head;
-            }
-            //If the list contains only one element
-            //Then it will remove it and both head and tail will point to null
-            else {
-                head = tail = null;
-            }
-        }
-    }
+
     public void remove(int key) {
         if (head == null) {
-           head = null;
+            head = null;
         }
 
         // Find the required node
@@ -110,16 +86,18 @@ public class CircularLinkedList {
         }
     }
 
-    public void killSoldiers(int intervall) {
+    public void killSoldiers(int interval) {
         Node current = tail;
+        //Checks if list is empty
         if (head == null) {
             System.out.println("List is empty");
         } else {
+            //Removes soldiers in intervall until one remains
             do {
-                for (int i = 0; i < intervall; i++) {
+                for (int i = 0; i < interval; i++) {
                     current = current.next;
                 }
-                System.out.println("Removing: " + current.getData()+"\n");
+                System.out.println("Removing: " + current.getData() + "\n");
                 remove(current.getData());
                 display();
             } while (sizeOfList() > 1);
@@ -138,8 +116,6 @@ public class CircularLinkedList {
         }
         return length;
     }
-
-
 }
 
 

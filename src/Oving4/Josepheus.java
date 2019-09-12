@@ -5,7 +5,7 @@ public class Josepheus {
     public static void main(String[] args) {
 
         int soldiers = 10;
-        int intervall = 4;
+        int interval = 4;
 
         CircularLinkedList cll = new CircularLinkedList();
 
@@ -18,7 +18,7 @@ public class Josepheus {
         cll.display();
 
         System.out.println("Killing soldiers");
-        cll.killSoldiers(intervall);
+        cll.killSoldiers(interval);
 
         //Display the new list
         cll.display();

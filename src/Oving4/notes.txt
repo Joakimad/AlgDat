@@ -1,0 +1,4 @@
+Josepheus
+
+For-løkke og while-løkke
+
