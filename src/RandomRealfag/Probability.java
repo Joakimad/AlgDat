@@ -1,5 +1,8 @@
 package RandomRealfag;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
+import javax.xml.bind.SchemaOutputResolver;
 import java.util.Arrays;
 
 public class Probability {
@@ -26,9 +29,7 @@ public class Probability {
     }
 
     public double findDistributionFunction(double[] values, double[] probability, double low, double high) {
-
         double sum = 0;
-
         for (int i = Arrays.binarySearch(values,low); i <= Arrays.binarySearch(values,high); i++) {
             sum += probability[i];
         }
