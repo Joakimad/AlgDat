@@ -4,8 +4,8 @@ public class Josepheus {
 
     public static void main(String[] args) {
 
-        int soldiers = 10;
-        int interval = 4;
+        int soldiers = 41;
+        int interval = 3;
 
         CircularLinkedList cll = new CircularLinkedList();
 

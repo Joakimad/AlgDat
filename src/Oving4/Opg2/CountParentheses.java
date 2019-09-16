@@ -20,14 +20,14 @@ public class CountParentheses {
 
         String codeBlock = "";
         try {
-            codeBlock = readFile("codeExample.txt");
+            codeBlock = readFile("src/Oving4/Opg2/codeExample.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         for (int i = 0; i < codeBlock.length(); i++) {
 
-            int current = (int)codeBlock.charAt(i);
+            int current = (int) codeBlock.charAt(i);
 
             switch (current) {
                 case openBrackets:
@@ -37,17 +37,23 @@ public class CountParentheses {
                     break;
                 case closedBrackets:
                     if (stack.peek() == openBrackets) {
-                        stack.pop();
+                        if (!(stack.empty())) {
+                            stack.pop();
+                        }
                     }
                     break;
                 case closedCurlyBrackets:
                     if (stack.peek() == openCurlyBrackets) {
-                        stack.pop();
+                        if (!(stack.empty())) {
+                            stack.pop();
+                        }
                     }
                     break;
                 case closedParenthesis:
                     if (stack.peek() == openParenthesis) {
-                        stack.pop();
+                        if (!(stack.empty())) {
+                            stack.pop();
+                        }
                     }
                     break;
                 default:
@@ -61,7 +67,7 @@ public class CountParentheses {
     }
 
     private static String readFile(String filename) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("src/Oving4/Opg2/codeExample.txt"));
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
 
         StringBuilder content = new StringBuilder();
         String line;
