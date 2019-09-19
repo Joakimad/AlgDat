@@ -86,7 +86,7 @@ public class Main2 {
         int[] array;
 
         //Best deletall = 71?
-        for (int deletall = 65; deletall < 85; deletall +=1) {
+        for (int deletall = 70; deletall < 85; deletall +=1) {
             Date start = new Date();
             int runder = 0;
             double tid;
@@ -97,7 +97,7 @@ public class Main2 {
                 quicksort(array, 0, n - 1, deletall);
                 slutt = new Date();
                 ++runder;
-            } while (slutt.getTime() - start.getTime() < 5000);
+            } while (slutt.getTime() - start.getTime() < 20000);
             tid = (double)
                     (slutt.getTime() - start.getTime()) / runder;
 
