@@ -7,10 +7,10 @@ import java.io.IOException;
 public class Klient {
 
     public static void main(String[] args) {
-        int size = 128;
+        int size = 127;
         String names = "";
         try {
-            names = readFile("src/Oving5/navn.txt");
+            names = readFile("src/Oving5/Opg1/navn.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,8 +28,9 @@ public class Klient {
 
         double avgCollision = (double) collisions/nameCount;
 
-        System.out.println("---\nAntall elementer: " + amountElements);
+        System.out.println("---\nAntall brukte plasser: " + amountElements);
         System.out.println("Lastefaktor: " + (double) amountElements / size);
+        System.out.println("Antall kollisjoner: " + collisions);
         System.out.println("Gjennomsnittlig antall kollisjoner per person: " + avgCollision);
     }
 
