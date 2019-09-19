@@ -14,7 +14,7 @@ public class Klient {
         int randNumSize = 5000000;
         int[] randomArr = new int[randNumSize];
         for (int i = 0; i < randomArr.length; i++) {
-            randomArr[i] = rnd.nextInt(size * 20);
+            randomArr[i] = rnd.nextInt(size * 100);
         }
 
         Date start = new Date();
@@ -25,6 +25,9 @@ public class Klient {
             //Stuff here
             for (int i = 0; i < randNumSize; i++) {
                 hs.addToTable(randomArr[i]);
+                if (i % 1000000 == 0) {
+                    System.out.println("Going strong");
+                }
             }
             slutt = new Date();
             runder++;
