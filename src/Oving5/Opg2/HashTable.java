@@ -9,31 +9,6 @@ public class HashTable {
         list = new Integer[size];
     }
 
-/*    public void addToTable(int key) {
-        int index = h1(key, list.length);
-
-        boolean foundEmpty = false;
-
-        do {
-            if (list[index] != null) {
-                collisions++;
-
-                int pos = probe()
-
-                index = h2(key, list.length);
-
-
-
-                if (list[index] == null) {
-                    foundEmpty = true;
-                }
-            } else {
-                list[index] = key;
-                foundEmpty = true;
-            }
-        } while (!foundEmpty);
-    }*/
-
     public int addToTable(int key) {
 
         int m = list.length;
