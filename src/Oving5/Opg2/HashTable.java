@@ -37,8 +37,8 @@ public class HashTable {
     public int addToTable(int key) {
 
         int m = list.length;
-        int h1 = find_h1(key, list.length);
-        int h2 = find_h2(key, list.length);
+        int h1 = find_h1(key, m);
+        int h2 = find_h2(key, m);
         for (int i = 0; i < m; i++) {
             int j = probe(h1, h2, i, m);
             if (list[j] == null) {
@@ -51,7 +51,7 @@ public class HashTable {
     }
 
     private int probe(int h1, int h2, int i, int m) {
-        return (h1 + h2) % m;
+        return (h1 + i * h2) % m;
 
     }
 
