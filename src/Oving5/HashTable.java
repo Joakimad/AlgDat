@@ -15,7 +15,8 @@ public class HashTable {
 
         if (list[index] != null) {
             Node next = list[index];
-            //linked list from node on inde
+            //linked list from node on index
+            System.out.println(list[index].getData());
             boolean isEmpty = false;
             do {
                 System.out.println("Kollisjon: " + next.getData());
@@ -48,9 +49,21 @@ public class HashTable {
         return key;
     }
 
+    public double countUsed(int size) {
+        int sum = 0;
+        for (int i = 0; i < list.length; i++) {
+            if (list[i] != null) {
+                sum++;
+                System.out.println(list[i].getData());
+            }
+        }
+        System.out.println(sum);
+        double returnVerdi = (double)sum/ (double)size;
+        return (returnVerdi);
+    }
+
     public int countAll() {
         int sum = 0;
-
         for (int i = 0; i < list.length; i++) {
             Node next = list[i];
             if (list[i] != null) {

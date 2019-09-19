@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Klient {
 
     public static void main(String[] args) {
-
+        int size = 128;
         String names = "";
         try {
             names = readFile("src/Oving5/navn.txt");
@@ -16,13 +16,14 @@ public class Klient {
         }
         String[] nameArr = names.split("\n");
 
-        HashTable hs = new HashTable(128);
+        HashTable hs = new HashTable(size);
 
         for (int i = 0; i < nameArr.length; i++) {
             hs.addToTable(nameArr[i]);
         }
 
         System.out.println(hs.countAll());
+        System.out.println(hs.countUsed(size) + " hallooooooooo");
     }
 
     private static String readFile(String filename) throws IOException {
