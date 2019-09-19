@@ -1,4 +1,4 @@
-package Oving5;
+package Oving5.Opg1;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
