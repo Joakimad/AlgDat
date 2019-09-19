@@ -1,7 +1,5 @@
 package Oving5;
 
-import java.util.LinkedList;
-
 public class HashTable {
 
     private Node[] list;
@@ -16,22 +14,24 @@ public class HashTable {
         Node entry = new Node(data);
 
         if (list[index] != null) {
+            Node next = list[index].getNext();
             //linked list from node on index
-
+            System.out.println(list[index].getData());
             boolean isEmpty = false;
-
             do {
-                if (list[index].getNext() == null) {
+                next = next.getNext();
+                if (next == null) {
                     isEmpty = true;
+                    list[index].setNext(entry);
                 }
-            } while (isEmpty);
+            } while (!isEmpty);
 
         } else {
             list[index] = entry;
         }
     }
 
-    public int divHash(int k, int m) {
+    private int divHash(int k, int m) {
         return k % m;
     }
 
@@ -55,6 +55,24 @@ public class HashTable {
         for (int i = 0; i < list.length; i++) {
             if (list[i] != null) {
                 sum++;
+                System.out.println(list[i].getData());
+            }
+        }
+        return sum;
+    }
+
+    public int countAll() {
+        int sum = 0;
+        for (int i = 0; i < list.length; i++) {
+            if (list[i] != null) {
+                boolean isEmpty = false;
+                do {
+                    sum++;
+                    System.out.println(list[i].getData());
+                    if (list[i].getNext() == null) {
+                        isEmpty = true;
+                    }
+                } while (!isEmpty);
             }
         }
         return sum;

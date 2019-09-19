@@ -23,7 +23,8 @@ public class Klient {
             hs.addToTable(nameArr[i]);
         }
 
-        System.out.println(hs.countUsed());
+        //System.out.println(hs.countUsed());
+        //System.out.println(hs.countAll());
 
 
     }
