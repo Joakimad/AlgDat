@@ -49,7 +49,7 @@ public class HashTable {
         return key;
     }
 
-    public int countUsed() {
+    public double countUsed(int size) {
         int sum = 0;
         for (int i = 0; i < list.length; i++) {
             if (list[i] != null) {
@@ -57,12 +57,13 @@ public class HashTable {
                 System.out.println(list[i].getData());
             }
         }
-        return sum;
+        System.out.println(sum);
+        double returnVerdi = (double)sum/ (double)size;
+        return (returnVerdi);
     }
 
     public int countAll() {
         int sum = 0;
-
         for (int i = 0; i < list.length; i++) {
             Node next = list[i];
             if (list[i] != null) {
