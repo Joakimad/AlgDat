@@ -3,7 +3,6 @@ package Oving5;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Hashtable;
 
 public class Klient {
 
@@ -25,8 +24,6 @@ public class Klient {
 
         //System.out.println(hs.countUsed());
         System.out.println(hs.countAll());
-
-
     }
 
     private static String readFile(String filename) throws IOException {

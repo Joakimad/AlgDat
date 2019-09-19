@@ -19,10 +19,12 @@ public class HashTable {
             System.out.println(list[index].getData());
             boolean isEmpty = false;
             do {
-                next = next.getNext();
-                if (next == null) {
+                if (next.getNext() == null) {
                     isEmpty = true;
-                    list[index].setNext(entry);
+                    next.setNext(entry);
+                }
+                else {
+                    next = next.getNext();
                 }
             } while (!isEmpty);
 
@@ -43,6 +45,7 @@ public class HashTable {
             // Tar ascii koden og ganger med plass i stringen +1
             key += ascii * (i + 1);
         }
+
         return key;
     }
 
