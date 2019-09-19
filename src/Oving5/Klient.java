@@ -18,12 +18,19 @@ public class Klient {
 
         HashTable hs = new HashTable(size);
 
-        for (int i = 0; i < nameArr.length; i++) {
-            hs.addToTable(nameArr[i]);
+        for (String s : nameArr) {
+            hs.addToTable(s);
         }
 
-        System.out.println(hs.countAll());
-        System.out.println(hs.countUsed(size) + " hallooooooooo");
+        int amountElements = hs.countUsed();
+        int collisions = hs.getCollisions();
+        int nameCount = nameArr.length;
+
+        double avgCollision = (double) collisions/nameCount;
+
+        System.out.println("---\nAntall elementer: " + amountElements);
+        System.out.println("Lastefaktor: " + (double) amountElements / size);
+        System.out.println("Gjennomsnittlig antall kollisjoner per person: " + avgCollision);
     }
 
     private static String readFile(String filename) throws IOException {

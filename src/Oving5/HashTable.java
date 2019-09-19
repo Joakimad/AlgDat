@@ -3,6 +3,7 @@ package Oving5;
 public class HashTable {
 
     private Node[] list;
+    private int collisions = 0;
 
     public HashTable(int size) {
         list = new Node[size];
@@ -15,10 +16,10 @@ public class HashTable {
 
         if (list[index] != null) {
             Node next = list[index];
-            //linked list from node on index
-            System.out.println(list[index].getData());
+            //linked list from node on inde
             boolean isEmpty = false;
             do {
+                collisions++;
                 System.out.println("Kollisjon: " + next.getData());
                 if (next.getNext() == null) {
                     isEmpty = true;
@@ -49,21 +50,20 @@ public class HashTable {
         return key;
     }
 
-    public double countUsed(int size) {
+    public int countUsed() {
         int sum = 0;
         for (int i = 0; i < list.length; i++) {
             if (list[i] != null) {
                 sum++;
-                System.out.println(list[i].getData());
+
             }
         }
-        System.out.println(sum);
-        double returnVerdi = (double)sum/ (double)size;
-        return (returnVerdi);
+        return sum;
     }
 
     public int countAll() {
         int sum = 0;
+
         for (int i = 0; i < list.length; i++) {
             Node next = list[i];
             if (list[i] != null) {
@@ -78,5 +78,9 @@ public class HashTable {
             }
         }
         return sum;
+    }
+
+    public int getCollisions() {
+        return collisions;
     }
 }
