@@ -24,7 +24,7 @@ public class Klient {
         }
 
         //System.out.println(hs.countUsed());
-        //System.out.println(hs.countAll());
+        System.out.println(hs.countAll());
 
 
     }

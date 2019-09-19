@@ -14,7 +14,7 @@ public class HashTable {
         Node entry = new Node(data);
 
         if (list[index] != null) {
-            Node next = list[index].getNext();
+            Node next = list[index];
             //linked list from node on index
             System.out.println(list[index].getData());
             boolean isEmpty = false;
@@ -46,10 +46,6 @@ public class HashTable {
         return key;
     }
 
-    public Node[] getHashedList() {
-        return list;
-    }
-
     public int countUsed() {
         int sum = 0;
         for (int i = 0; i < list.length; i++) {
@@ -63,13 +59,16 @@ public class HashTable {
 
     public int countAll() {
         int sum = 0;
+
         for (int i = 0; i < list.length; i++) {
+            Node next = list[i];
             if (list[i] != null) {
                 boolean isEmpty = false;
                 do {
+                    next = next.getNext();
                     sum++;
                     System.out.println(list[i].getData());
-                    if (list[i].getNext() == null) {
+                    if (next == null) {
                         isEmpty = true;
                     }
                 } while (!isEmpty);
