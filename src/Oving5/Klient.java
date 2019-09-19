@@ -3,6 +3,7 @@ package Oving5;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Hashtable;
 
 public class Klient {
 
@@ -15,6 +16,16 @@ public class Klient {
             e.printStackTrace();
         }
         String[] nameArr = names.split("\n");
+
+        HashTable hs = new HashTable(128);
+
+        for (int i = 0; i < nameArr.length; i++) {
+            hs.addToTable(nameArr[i]);
+        }
+
+        System.out.println(hs.countUsed());
+
+
     }
 
     private static String readFile(String filename) throws IOException {
@@ -29,6 +40,4 @@ public class Klient {
         }
         return content.toString();
     }
-
-
 }
