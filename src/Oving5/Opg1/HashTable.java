@@ -20,7 +20,7 @@ public class HashTable {
             boolean isEmpty = false;
             do {
                 collisions++;
-                System.out.println("Kollisjon: " + next.getData());
+                System.out.println("Kollisjon: " + next.getData() + " - " + entry.getData());
                 if (next.getNext() == null) {
                     isEmpty = true;
                     next.setNext(entry);
