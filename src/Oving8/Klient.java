@@ -8,7 +8,6 @@ public class Klient {
 
     public static void main(String[] args) throws IOException {
 
-
         // READING FROM FILE AND INITIALIZING CLASS
         String filename = "src/Oving8/flytgraf1";
 
@@ -17,9 +16,8 @@ public class Klient {
         String[] initVal = init.split(" ");
 
         int vertices = Integer.parseInt(initVal[0]);
-        int edges = Integer.parseInt(initVal[1]);
 
-        WeightedGraph ek = new WeightedGraph(vertices, edges);
+        WeightedGraph ek = new WeightedGraph(vertices);
 
         String line;
         while ((line = reader.readLine()) != null) {
