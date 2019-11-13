@@ -1,5 +1,7 @@
 package Øving12;
 
+import sun.text.resources.cldr.kok.FormatData_kok;
+
 import java.io.IOException;
 
 public class Client {
@@ -10,10 +12,15 @@ public class Client {
 
         //testfile2 = 11 448 bytes
         ZipZap zipzap = new ZipZap();
+        kok k = new kok();
 
         try {
-            zipzap.compress("testfile2.txt");
-            //zipzap.uncompress("testfile2.txt");
+
+            //k.compress("testfile2.txt");
+            //k.uncompress("kok-testfile2.txt");
+
+            //zipzap.compress("testfile2.txt");
+            zipzap.uncompress("zipzap-testfile2.txt");
 
 
         } catch (IOException e) {
