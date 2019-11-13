@@ -13,8 +13,8 @@ public class Client {
 
         try {
 
-            //zipzap.compress("testfile2.txt");
-            zipzap.uncompress("testfile2.txt");
+            zipzap.compress("testfile2.txt");
+            //zipzap.uncompress("Test.txt");
 
 
         } catch (IOException e) {
