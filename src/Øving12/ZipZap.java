@@ -12,6 +12,7 @@ public class ZipZap {
     private int bufferSize = 32767;
     private CircularBuffer searchBuffer = new CircularBuffer(bufferSize);
    // private ArrayList<String> currentChars = new ArrayList<String>();
+    int currentElement = -1;
     char[] Characters;
 
     public void compress(String infile) throws IOException {
@@ -28,14 +29,22 @@ public class ZipZap {
 
         Characters = inputText.toCharArray();
       //  for(int k = 0; k<Characters.length; k++) System.out.println(Characters[k]);
-        int lengthRepeat = -1;
-        for (int i = 0; i< Characters.length; i++){
-           ArrayList<Integer> usages = searchBuffer.findLetterAll(Characters[i]);
-           if (usages.size()>0 && i<=(Characters.length-2)){
-               lengthRepeat = findLongestRepetableString(i+1, usages);
-              if(lengthRepeat - i > 3) System.out.println("her repeteres noe fra index: " + i + " med lengde " + (lengthRepeat-i));
+        int[] value = {-1, -1};
+        for (currentElement = 0; currentElement< Characters.length; currentElement++){
+           ArrayList<Integer> usages = searchBuffer.findLetterAll(Characters[currentElement]);
+           if (usages.size()>0 && currentElement<=(Characters.length-2)){
+               value = findLongestRepetableString(currentElement+1, usages);
+               if(value[0] > 2){
+                   System.out.println("her repeteres noe fra index: " + currentElement + " med lengde " + value[0] + " med " + value[1] +" steg bakover");
+               }
            }
-           searchBuffer.insert(Characters[i]);
+           searchBuffer.insert(Characters[currentElement]);
+            if(value[0] > 2 && usages.size()>0 && currentElement<=(Characters.length-2)) {
+                int recentCurrentElement = currentElement +1;
+                for (currentElement = currentElement; currentElement < (value[0] + recentCurrentElement)-5; currentElement++){
+                    searchBuffer.insert(Characters[currentElement]);
+                }
+            }
         }
 
 
@@ -46,19 +55,21 @@ public class ZipZap {
         in = new BufferedReader(new FileReader("src/Øving12/compressed/" + infile));
         out = new PrintWriter(new BufferedWriter(new FileWriter("src/Øving12/uncompressed/" + infile)));
     }
-
-    public int findLongestRepetableString(int pos, ArrayList<Integer> usages){
+    //finds how long we can go back and how far we can go back to find it, int[] = {the position of the last found letter in the chain, how far back we have to go}
+    public int[] findLongestRepetableString(int pos, ArrayList<Integer> usages){
         ArrayList<Integer> newPos = searchBuffer.findLetter(Characters[pos], usages);
-        int bufferPos = 0;
+        int[] info = new int[2];
         if( newPos.size()>0) {
             pos++;
-            bufferPos++;
             if(pos<Characters.length) {
-                pos = findLongestRepetableString(pos, newPos);
+                info = findLongestRepetableString(pos, newPos);
             }
         }
-        else{}
-        return pos;
+        else{
+            info[0] = pos - currentElement;
+            info[1] = searchBuffer.returnPosition(pos - currentElement, usages);
+        }
+        return info;
 
     }
 

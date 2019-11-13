@@ -5,7 +5,6 @@ package Øving12;
  **/
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /** Class Circular Buffer **/
 class CircularBuffer
@@ -96,6 +95,24 @@ class CircularBuffer
             if(buf[(positions.get(i)+ 1) % maxSize] == search) posNew.add(positions.get(i) +1);
         }
         return  posNew;
+    }
+
+    public int returnPosition(int length, ArrayList<Integer> positions) {
+        int pos = positions.get(0);
+        int rear2 = rear % maxSize;
+        if (pos-length > 0 ){
+            pos = pos-length;
+        }
+        else {
+            pos = maxSize + pos - length;
+        }
+        if( rear2 - pos > 0) {
+            return rear2 - pos;
+        }
+
+        else {
+            return rear2 + maxSize - pos;
+        }
     }
 }
 
