@@ -41,7 +41,7 @@ public class ZipZap {
            searchBuffer.insert(Characters[currentElement]);
             if(value[0] > 2 && usages.size()>0 && currentElement<=(Characters.length-2)) {
                 int recentCurrentElement = currentElement +1;
-                for (currentElement = currentElement; currentElement < (value[0] + recentCurrentElement)-5; currentElement++){
+                for (currentElement = currentElement; currentElement < (value[0] + recentCurrentElement); currentElement++){
                     searchBuffer.insert(Characters[currentElement]);
                 }
             }

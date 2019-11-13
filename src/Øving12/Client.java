@@ -13,7 +13,7 @@ public class Client {
 
         try {
 
-            zipzap.compress("Test.txt");
+            zipzap.compress("testfile2.txt");
             //zipzap.uncompress("Test.txt");
 
 
