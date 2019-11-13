@@ -1,39 +1,38 @@
 package Øving12;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Client {
 
     public static void main(String[] args) {
 
         //READ FILE AND COMPRESS IT
-
-        String file = "src/Øving12/testfiler/testfil2.txt"
         String input = "";
-
-
-
-        String innfil = new DataInputStream(new BufferedInputStream(new FileInputStream(inn_navn)));
+        try {
+            input = readFile("src/Øving12/testfiler/testfil2.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(input);
 
     }
 
     private static String readFile(String filename) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
 
-        //Åpne filer:
+        StringBuilder content = new StringBuilder();
+        String line;
 
-        utfil = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(ut_navn)));
-
-
-//Lese data fra fil inn i byte-array:
-// byte []data : arrayet vi leser inn i
-// int posisjon : index i byte-array for det vi leser inn
-// int mengde : antall byte vi vil lese inn
-        innfil.readFully(data, posisjon, mengde);
-
-
+        while ((line = reader.readLine()) != null) {
+            content.append(line);
+            content.append(System.lineSeparator());
+        }
+        return content.toString();
     }
+
 
 
 }
