@@ -36,10 +36,8 @@ public class WeightedGraph {
         System.out.println("Maksimum flyt fra " + start + " til " + end + " med Edmond-Karp");
         System.out.println("Økning : Flytøkende vei");
 
-
         // Loops as long as it finds viable paths
         while (true) {
-
             // Uses queue for traversal, adds startpoint.
             Queue<Integer> queue = new LinkedList<>();
             queue.add(start);
@@ -59,7 +57,8 @@ public class WeightedGraph {
             boolean foundPath = false;
             int current;
 
-            // Uses a queue to keep track of traversal
+            // Uses a queue to keep track of traversal.
+            // BFS
             while (!queue.isEmpty()) {
                 current = queue.peek();
 

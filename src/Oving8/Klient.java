@@ -9,7 +9,7 @@ public class Klient {
     public static void main(String[] args) throws IOException {
 
         // READING FROM FILE AND INITIALIZING CLASS
-        String filename = "src/Oving8/flytgraf1";
+        String filename = "src/Oving8/flytgraf3";
 
         BufferedReader reader = new BufferedReader(new FileReader(filename));
         String init = reader.readLine();
@@ -29,6 +29,6 @@ public class Klient {
         }
 
         // WHERE THE MAGIC HAPPENS
-        ek.getMaxFlow(0, vertices-1);
+        ek.getMaxFlow(0, 1);
     }
 }
