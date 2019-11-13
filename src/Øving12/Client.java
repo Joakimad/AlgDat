@@ -12,9 +12,8 @@ public class Client {
         ZipZap zipzap = new ZipZap();
 
         try {
-
-            //zipzap.compress("testfile2.txt");
-            zipzap.uncompress("testfile2.txt");
+            zipzap.compress("testfile2.txt");
+            //zipzap.uncompress("testfile2.txt");
 
 
         } catch (IOException e) {
