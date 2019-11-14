@@ -138,7 +138,7 @@ public class ZipZap {
         }
 
 
-        System.out.println(text.substring(133, 133+8));
+        System.out.println(text.substring(133, 133 + 8));
 
         //System.out.println(text);
 
