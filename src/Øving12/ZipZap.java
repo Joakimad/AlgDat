@@ -92,13 +92,13 @@ public class ZipZap {
                 LengthPos = LengthPos+1;
             }
         }
-        System.out.println(java.util.Arrays.toString(inputBytes));
-        System.out.println('\n');
+        //System.out.println(java.util.Arrays.toString(inputBytes));
+        //System.out.println('\n');
         System.out.println(output.toString());
         System.out.println(Order.toString());
         System.out.println(java.util.Arrays.toString(order));
-        //System.out.println(Length.toString());
-        //System.out.println(java.util.Arrays.toString(length));
+        System.out.println(Length.toString());
+        System.out.println(java.util.Arrays.toString(length));
         byte[] outputArray = new byte[output.size()];
         for(int i = 0; i<output.size(); i++){
             outputArray[i] = output.get(i);

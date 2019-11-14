@@ -84,15 +84,30 @@ class CircularBuffer
 
     public ArrayList<Integer> findLetterAll(byte search){
         ArrayList<Integer> posisjoner = new ArrayList<Integer>();
-        for (int i = 0; i<maxSize; i++){
-            if(buf[i] == search) posisjoner.add(i);
+        if(bufLen==maxSize) {
+            for (int i = 0; i < maxSize; i++) {
+                if (buf[i] == search) posisjoner.add(i);
+            }
         }
+        else{
+            for (int i = 0; i < bufLen; i++){
+                if (buf[i] == search) posisjoner.add(i);
+            }
+        }
+
         return posisjoner;
     }
     public ArrayList<Integer> findLetter(byte search, ArrayList<Integer> positions){
         ArrayList<Integer> posNew = new ArrayList<>();
-        for (int i = 0; i<positions.size(); i++) {
-            if(buf[(positions.get(i)+ 1) % maxSize] == search) posNew.add(positions.get(i) +1);
+        if(bufLen==maxSize) {
+            for (int i = 0; i < positions.size(); i++) {
+                if (buf[(positions.get(i) + 1) % maxSize] == search) posNew.add(positions.get(i) + 1);
+            }
+        }
+        else {
+            for (int i = 0; i < positions.size(); i++) {
+                if (buf[(positions.get(i) + 1) % maxSize] == search && positions.get(i) + 1 < bufLen) posNew.add(positions.get(i) + 1);
+            }
         }
         return  posNew;
     }
