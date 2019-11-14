@@ -13,7 +13,7 @@ class CircularBuffer
     private int front = 0;
     private int rear = 0;
     private int bufLen = 0;
-    private char[] buf;
+    private byte[] buf;
 
     /** constructor **/
     public CircularBuffer(int size)
@@ -22,7 +22,7 @@ class CircularBuffer
         front = rear = 0;
         rear = 0;
         bufLen = 0;
-        buf = new char[maxSize];
+        buf = new byte[maxSize];
     }
     /** function to get size of buffer **/
     public int getSize()
@@ -35,7 +35,7 @@ class CircularBuffer
         front = rear = 0;
         rear = 0;
         bufLen = 0;
-        buf = new char[maxSize];
+        buf = new byte[maxSize];
     }
     /** function to check if buffer is empty **/
     public boolean isEmpty()
@@ -48,7 +48,7 @@ class CircularBuffer
         return bufLen == maxSize;
     }
     /** insert an element **/
-    public void insert(char c)
+    public void insert(byte c)
     {
         if (isFull()){
             delete();
@@ -59,7 +59,7 @@ class CircularBuffer
 
     }
     /** delete an element **/
-    public char delete()
+    public byte delete()
     {
         if (!isEmpty() )
         {
@@ -82,14 +82,14 @@ class CircularBuffer
         System.out.println();
     }
 
-    public ArrayList<Integer> findLetterAll(char search){
+    public ArrayList<Integer> findLetterAll(byte search){
         ArrayList<Integer> posisjoner = new ArrayList<Integer>();
         for (int i = 0; i<maxSize; i++){
             if(buf[i] == search) posisjoner.add(i);
         }
         return posisjoner;
     }
-    public ArrayList<Integer> findLetter(char search, ArrayList<Integer> positions){
+    public ArrayList<Integer> findLetter(byte search, ArrayList<Integer> positions){
         ArrayList<Integer> posNew = new ArrayList<>();
         for (int i = 0; i<positions.size(); i++) {
             if(buf[(positions.get(i)+ 1) % maxSize] == search) posNew.add(positions.get(i) +1);

@@ -3,7 +3,12 @@ package Øving12;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.CharBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 
@@ -17,31 +22,25 @@ public class ZipZap {
     private ArrayList<Short> Length = new ArrayList<Short>();
     int currentElement = -1;
     char[] Characters;
-    String Output = "";
-    int divisionNumber = 8;
+    ArrayList<Byte> output = new ArrayList<Byte>();
+    int divisionNumber = 2;
+    byte[] inputBytes;
 
     public void compress(String infile) throws IOException {
 
-       in = new BufferedReader(new FileReader("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\testfiles\\" + infile));
-        out = new PrintWriter(new BufferedWriter(new FileWriter("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\compressed\\" + infile)));
+       Path path = Paths.get("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\testfiles\\" + infile);
 
-        String inputText = "";
-        String line = "";
-        while ((line = in.readLine()) != null){
-            inputText += line + '\n';
-        }
-
-
-        Characters = inputText.toCharArray();
-      //  for(int k = 0; k<Characters.length; k++) System.out.println(Characters[k]);
+        inputBytes = Files.readAllBytes(path);
         int[] value = {-1, -1};
         short counter = 0;
-        for (currentElement = 0; currentElement< Characters.length; currentElement++){
-           ArrayList<Integer> usages = searchBuffer.findLetterAll(Characters[currentElement]);
-           if (usages.size()>0 && currentElement<=(Characters.length-2)){
+        for (currentElement = 0; currentElement< inputBytes.length; currentElement++){
+           ArrayList<Integer> usages = searchBuffer.findLetterAll(inputBytes[currentElement]);
+           if (usages.size()>0 && currentElement<=(inputBytes.length-2)){
                value = findLongestRepetableString(currentElement+1, usages);
                if(value[0] > divisionNumber){
-                   Order.add(counter);
+                   if(counter<0) {
+                       Order.add(counter);
+                   }
                    counter = 0;
                    //System.out.println("her repeteres noe fra index: " + currentElement + " med lengde " + value[0] + " med " + value[1] +" steg bakover");
                    Order.add((short)value[1]);
@@ -54,55 +53,66 @@ public class ZipZap {
            else{
                counter = (short) (counter -1);
            }
-           searchBuffer.insert(Characters[currentElement]);
-            if(value[0] > divisionNumber && usages.size()>0 && currentElement<=(Characters.length-2)) {
+            if(value[0] > divisionNumber && usages.size()>0 && currentElement<=(inputBytes.length-2)) {
                 int recentCurrentElement = currentElement +1;
                 for (currentElement = currentElement; currentElement < (value[0] + recentCurrentElement-1); currentElement++){
-                    searchBuffer.insert(Characters[currentElement]);
+                    searchBuffer.insert(inputBytes[currentElement]);
                 }
                 currentElement--;
+            }
+            else{
+                searchBuffer.insert(inputBytes[currentElement]);
             }
         }
         Order.add(counter);
         currentElement = 0;
-        System.out.println(Order.toString());
-        for (int i = 0; i<Order.size(); i++){
+        byte[] order = shortToByte(Order);
+        System.out.println(order.length);
+        byte[] length = shortToByte(Length);
+        System.out.println(length.length);
+        System.out.println(order.toString());
+        for (int i = 0; i<order.length/2; i++){
             int LengthPos = 0;
-            if(Order.get(i)<(short)0) {
-                Output += Order.get(i) + "~";
+            if(order[i*2] < 0) {
+                output.add(order[i*2]);
+                output.add(order[(i*2)+1]);
                 int recentElement = currentElement;
                 for (currentElement = currentElement; currentElement< recentElement-Order.get(i); currentElement++){
-                    if(currentElement<Characters.length - 1) {
-                        Output += inputText.charAt(currentElement);
+                    if(currentElement<inputBytes.length) {
+                        output.add(inputBytes[currentElement]);
                     }
                 }
             }
             else {
-                Output+=Order.get(i) + "~";
-                Output+=Length.get(LengthPos) + "~";
-                currentElement = currentElement + Length.get(LengthPos);
+                output.add(order[2*i]);
+                output.add(order[(2*i)+1]);
+                output.add(length[LengthPos*2]);
+                output.add(length[(LengthPos*2) +1])  ;
+                currentElement = currentElement + bytesToShort(length, LengthPos*2);;
                 LengthPos++;
             }
         }
-        System.out.println(Output);
-        System.out.println(inputText);
-        out.print(Output);
-        out.close();
+        System.out.println(output.toString());
+        System.out.println(Order.toString());
+        System.out.println(Length.toString());
+        byte[] outputArray = new byte[output.size()];
+        for(int i = 0; i<output.size(); i++){
+            outputArray[i] = output.get(i);
+        }
+        try (FileOutputStream fos = new FileOutputStream("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\compressed\\" + infile)) {
+            fos.write(outputArray);
+            //fos.close(); There is no more need for this line since you had created the instance of "fos" inside the try. And this will automatically close the OutputStream
+        }
 
     }
 
-    public void uncompress(String infile) throws IOException {
-
-        in = new BufferedReader(new FileReader("src/Øving12/compressed/" + infile));
-        out = new PrintWriter(new BufferedWriter(new FileWriter("src/Øving12/uncompressed/" + infile)));
-    }
     //finds how long we can go back and how far we can go back to find it, int[] = {the position of the last found letter in the chain, how far back we have to go}
     public int[] findLongestRepetableString(int pos, ArrayList<Integer> usages){
-        ArrayList<Integer> newPos = searchBuffer.findLetter(Characters[pos], usages);
+        ArrayList<Integer> newPos = searchBuffer.findLetter(inputBytes[pos], usages);
         int[] info = new int[2];
         if( newPos.size()>0) {
             pos++;
-            if(pos<Characters.length) {
+            if(pos<inputBytes.length) {
                 info = findLongestRepetableString(pos, newPos);
             }
         }
@@ -119,7 +129,63 @@ public class ZipZap {
     public void addToBuffer(int start, int stop){
 
     }
+
+    public byte[] shortToByte(ArrayList<Short> s){
+        byte[] converted = new byte[s.size()*2];
+        for(int i = 0; i<s.size(); i++ ){
+            converted[i*2] = (byte) (s.get(i) & 0x00FF);
+            converted[(i*2)+1] =(byte) ((s.get(i) & 0xFF00) >> 8);
+        }
+        return converted;
+    }
+
+    public short bytesToShort(byte[] bytes, int startpos){
+        ByteBuffer bb = ByteBuffer.allocate(2);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        bb.put(bytes[startpos]);
+        bb.put(bytes[startpos+1]);
+        return bb.getShort(0);
+    }
+
+    public void uncompress(String infile) throws IOException {
+
+        Path path = Paths.get("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\compressed\\" + infile);
+
+        inputBytes = Files.readAllBytes(path);
+        short convertedBytes = 0;
+        short convertedLength = 0;
+        for (currentElement = 0; currentElement<inputBytes.length-1; currentElement++){
+            convertedBytes = bytesToShort(inputBytes, currentElement);
+            if(convertedBytes<0){
+                currentElement = currentElement + 2;
+                int recentElement = currentElement;
+                for(currentElement = currentElement; currentElement < recentElement - convertedBytes; currentElement++) {
+                    output.add(inputBytes[currentElement]);
+                }
+                currentElement--;
+            }
+            else {
+                int sizeBeforeAdd = output.size();
+                convertedLength = bytesToShort(inputBytes, currentElement+2);
+                convertedBytes = bytesToShort(inputBytes, currentElement);
+                currentElement = currentElement + 3;
+                for(int i = 0; i< convertedLength; i++){
+                    output.add(output.get(sizeBeforeAdd-convertedBytes+i));
+                }
+            }
+        }
+        out = new PrintWriter(new BufferedWriter(new FileWriter("src/Øving12/decompressed/" + infile)));
+        byte[] outputArray = new byte[output.size()];
+        for(int i = 0; i<output.size(); i++){
+            outputArray[i] = output.get(i);
+        }
+        try (FileOutputStream fos = new FileOutputStream("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\decompressed\\" + infile)) {
+            fos.write(outputArray);
+            //fos.close(); There is no more need for this line since you had created the instance of "fos" inside the try. And this will automatically close the OutputStream
+        }
+    }
 }
+
 
 
 // Reads 1 char at the time until end of file.
