@@ -80,33 +80,68 @@ public class ZipZap {
         outFile = new PrintWriter(new BufferedWriter(new FileWriter("src/Øving12/uncompressed/" + infile)));
 
         int currentChar_int;
+        StringBuilder text = new StringBuilder();
+        int encodedIndex;
+        int encodedLength;
+        int offset = 0;
 
+        // Parse through file char by char.
         while ((currentChar_int = inFile.read()) != -1) {
 
-            String tempString = "";
-            int encodedLookback = 0;
-            int encodedLength = 0;
+            text.append((char) currentChar_int);
 
-            // Found encoded piece. Start decompressing.
+            StringBuilder tempString = new StringBuilder();
+
+            // Found encoded piece. Finding lookback and length of string.
             if (currentChar_int == '~') {
-                while ((currentChar_int = inFile.read()) != '-') {
-                    tempString += (char) currentChar_int;
-                }
 
-                encodedLookback = Integer.parseInt(tempString);
-                tempString = "";
+                while ((currentChar_int = inFile.read()) != '-') {
+                    text.append((char) currentChar_int);
+                    tempString.append((char) currentChar_int);
+                }
+                text.append((char) currentChar_int);
+
+                encodedIndex = Integer.parseInt(tempString.toString());
+                tempString = new StringBuilder();
 
                 while ((currentChar_int = inFile.read()) != '~') {
-                    tempString += (char) currentChar_int;
+                    text.append((char) currentChar_int);
+                    tempString.append((char) currentChar_int);
                 }
-                encodedLength = Integer.parseInt(tempString);
-                System.out.println(encodedLookback + " - " + encodedLength);
+                text.append((char) currentChar_int);
 
-                //inFile.read();
+                encodedLength = Integer.parseInt(tempString.toString());
+
+                System.out.println(encodedIndex + " - " + encodedLength);
+
+                int start = encodedIndex;
+                if (encodedIndex - offset > 0) {
+                    start = encodedIndex - offset;
+                }
+
+                System.out.println("Start: " + start);
+
+                //Replaces the encoded text with the actual text.
+                StringBuilder uncompressed = new StringBuilder();
+                for (int i = start; i < encodedLength; i++) {
+                    uncompressed.append(text.charAt(i));
+                }
+
+                offset += encodedLength;
+                System.out.print(uncompressed);
+                outFile.print(uncompressed);
+
             } else {
                 outFile.print((char) currentChar_int);
             }
+            //System.out.println((char) currentChar_int);
         }
+
+
+        System.out.println(text.substring(133, 133+8));
+
+        //System.out.println(text);
+
         // close files
         inFile.close();
         outFile.flush();
