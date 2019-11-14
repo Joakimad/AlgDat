@@ -9,11 +9,11 @@ public class Client {
         //READ FILE AND COMPRESS IT
 
         //testfile2 = 11 448 bytes
-        ZipZap zipzap = new ZipZap();
+        Øving12.ZipZap zipzap = new Øving12.ZipZap();
 
         try {
 
-            zipzap.compress("testfile2.txt");
+            zipzap.compress("testfile3.pdf");
             //zipzap.uncompress("Test.txt");
 
 

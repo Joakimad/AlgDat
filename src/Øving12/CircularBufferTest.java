@@ -1,8 +1,11 @@
+/*
 package Øving12;
 
 import java.util.Scanner;
 
-/** Class CircularBufferTest  **/
+*/
+/** Class CircularBufferTest  **//*
+
 public class CircularBufferTest
 {
     public static void main(String[] args)
@@ -12,10 +15,14 @@ public class CircularBufferTest
         System.out.println("Circular Buffer Test\n");
         System.out.println("Enter Size of Buffer ");
         int n = scan.nextInt();
-        /* creating object of class CircularBuffer */
+        */
+/* creating object of class CircularBuffer *//*
+
         CircularBuffer cb = new CircularBuffer(n);
 
-        /* Perform Circular Buffer Operations */
+        */
+/* Perform Circular Buffer Operations *//*
+
         char ch;
 
         do
@@ -54,7 +61,9 @@ public class CircularBufferTest
                 default : System.out.println("Wrong Entry \n ");
                     break;
             }
-            /* display Buffer */
+            */
+/* display Buffer *//*
+
             cb.display();
 
             System.out.println("\nDo you want to continue (Type y or n) \n");
@@ -64,3 +73,4 @@ public class CircularBufferTest
     }
 }
 
+*/

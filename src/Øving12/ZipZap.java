@@ -2,51 +2,92 @@ package Øving12;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.nio.Buffer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 
+
 public class ZipZap {
 
-    private Reader in;
+    private BufferedReader in;
     private PrintWriter out;
     private int bufferSize = 32767;
-    private CircularBuffer searchBuffer = new CircularBuffer(bufferSize);
-   // private ArrayList<String> currentChars = new ArrayList<String>();
+    private Øving12.CircularBuffer searchBuffer = new Øving12.CircularBuffer(bufferSize);
+    private ArrayList<Short> Order = new ArrayList<Short>();
+    private ArrayList<Short> Length = new ArrayList<Short>();
     int currentElement = -1;
     char[] Characters;
+    String Output = "";
+    int divisionNumber = 8;
 
     public void compress(String infile) throws IOException {
 
-       BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\jon-stasjonær\\IdeaProjects\\Joakim sin git 2 år\\src\\Øving12\\testfiles\\" + infile));
-        //out = new PrintWriter(new BufferedWriter(new FileWriter("src/Øving12/compressed/" + infile)));
+       in = new BufferedReader(new FileReader("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\testfiles\\" + infile));
+        out = new PrintWriter(new BufferedWriter(new FileWriter("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\compressed\\" + infile)));
 
         String inputText = "";
         String line = "";
         while ((line = in.readLine()) != null){
-            inputText += line;
+            inputText += line + '\n';
         }
 
 
         Characters = inputText.toCharArray();
       //  for(int k = 0; k<Characters.length; k++) System.out.println(Characters[k]);
         int[] value = {-1, -1};
+        short counter = 0;
         for (currentElement = 0; currentElement< Characters.length; currentElement++){
            ArrayList<Integer> usages = searchBuffer.findLetterAll(Characters[currentElement]);
            if (usages.size()>0 && currentElement<=(Characters.length-2)){
                value = findLongestRepetableString(currentElement+1, usages);
-               if(value[0] > 2){
-                   System.out.println("her repeteres noe fra index: " + currentElement + " med lengde " + value[0] + " med " + value[1] +" steg bakover");
+               if(value[0] > divisionNumber){
+                   Order.add(counter);
+                   counter = 0;
+                   //System.out.println("her repeteres noe fra index: " + currentElement + " med lengde " + value[0] + " med " + value[1] +" steg bakover");
+                   Order.add((short)value[1]);
+                   Length.add((short) value[0]);
+               }
+               else{
+                   counter =(short) (counter -1);
                }
            }
+           else{
+               counter = (short) (counter -1);
+           }
            searchBuffer.insert(Characters[currentElement]);
-            if(value[0] > 2 && usages.size()>0 && currentElement<=(Characters.length-2)) {
+            if(value[0] > divisionNumber && usages.size()>0 && currentElement<=(Characters.length-2)) {
                 int recentCurrentElement = currentElement +1;
-                for (currentElement = currentElement; currentElement < (value[0] + recentCurrentElement); currentElement++){
+                for (currentElement = currentElement; currentElement < (value[0] + recentCurrentElement-1); currentElement++){
                     searchBuffer.insert(Characters[currentElement]);
                 }
+                currentElement--;
             }
         }
-
+        Order.add(counter);
+        currentElement = 0;
+        System.out.println(Order.toString());
+        for (int i = 0; i<Order.size(); i++){
+            int LengthPos = 0;
+            if(Order.get(i)<(short)0) {
+                Output += Order.get(i) + "~";
+                int recentElement = currentElement;
+                for (currentElement = currentElement; currentElement< recentElement-Order.get(i); currentElement++){
+                    if(currentElement<Characters.length - 1) {
+                        Output += inputText.charAt(currentElement);
+                    }
+                }
+            }
+            else {
+                Output+=Order.get(i) + "~";
+                Output+=Length.get(LengthPos) + "~";
+                currentElement = currentElement + Length.get(LengthPos);
+                LengthPos++;
+            }
+        }
+        System.out.println(Output);
+        System.out.println(inputText);
+        out.print(Output);
+        out.close();
 
     }
 
