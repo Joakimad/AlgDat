@@ -2,7 +2,7 @@ package Øving12;
 
 import java.io.*;
 
-public class ZipZap {
+public class ZipZap2 {
 
     private Reader inFile;
     private PrintWriter outFile;
@@ -20,53 +20,23 @@ public class ZipZap {
         inFile = new BufferedReader(new FileReader("src/Øving12/testfiles/" + infile));
         outFile = new PrintWriter(new BufferedWriter(new FileWriter("src/Øving12/compressed/zipzap-" + infile)));
 
+
         int currentChar_int;
-        int matchIndex = 0;
-        String match = "";
+
+        int offset;
+        int length;
+        char currentChar;
 
         // Reads 1 char at the time until end of file.
         while ((currentChar_int = inFile.read()) != -1) {
 
-            char currentChar = (char) currentChar_int;
-            int searchResult = searchBuffer.indexOf(match + currentChar);
+            currentChar = (char) currentChar_int;
 
-            // If match replace text and update where to find textpiece
-            if (searchResult != -1) {
-                match += currentChar;
-                matchIndex = searchResult;
+            //check if pattern is in searchbuffer
 
-            } else {
-                // Match not found in buffer. Encode
-                String encoded = "~" + matchIndex + "-" + match.length() + "~" + currentChar;
-                String originalText = match + currentChar;
+            //String output = "(" + offset + "," + length "," + currentChar + ")";
+            //outFile.print(output);
 
-                //Check if encoded is shorter than original
-                if (encoded.length() <= originalText.length()) {
-                    outFile.print(encoded);
-                    searchBuffer.append(originalText);
-                    match = "";
-                    matchIndex = 0;
-                } else {
-                    // output one char at the time until new match.
-                    match = originalText;
-                    matchIndex = -1;
-                    while (match.length() > 1 && matchIndex == -1) {
-                        outFile.print(match.charAt(0));
-                        searchBuffer.append(match.charAt(0));
-                        match = match.substring(1);
-                        matchIndex = searchBuffer.indexOf(match);
-                    }
-                }
-                trimSearchBuffer();
-            }
-        }
-        if (matchIndex != -1) {
-            String encoded = "~" + matchIndex + "~" + match.length();
-            if (encoded.length() <= match.length()) {
-                outFile.print("~" + matchIndex + "~" + match.length());
-            } else {
-                outFile.print(match);
-            }
         }
 
         // close files
@@ -123,7 +93,7 @@ public class ZipZap {
                 for (int i = start; i < encodedLength; i++) {
                     uncompressed.append(text.charAt(i));
                 }
-                
+
                 System.out.println("Replaced: " + uncompressed);
                 outFile.print(uncompressed);
 
