@@ -23,6 +23,7 @@ public class ZipZap {
         int currentChar_int;
         int matchIndex = 0;
         String match = "";
+        int currentIndex = 0;
 
         // Reads 1 char at the time until end of file.
         while ((currentChar_int = inFile.read()) != -1) {
@@ -33,7 +34,7 @@ public class ZipZap {
             // If match replace text and update where to find textpiece
             if (searchResult != -1) {
                 match += currentChar;
-                matchIndex = searchResult;
+                matchIndex = searchResult - match.length();
 
             } else {
                 // Match not found in buffer. Encode
@@ -59,6 +60,7 @@ public class ZipZap {
                 }
                 trimSearchBuffer();
             }
+            currentIndex++;
         }
         if (matchIndex != -1) {
             String encoded = "~" + matchIndex + "~" + match.length();
@@ -84,11 +86,13 @@ public class ZipZap {
         StringBuilder text = new StringBuilder();
         int encodedIndex;
         int encodedLength;
+        int currentIndex = 0;
 
         // Parse through file char by char.
         while ((currentChar_int = inFile.read()) != -1) {
 
             text.append((char) currentChar_int);
+            searchBuffer.append((char) currentChar_int);
 
             StringBuilder tempString = new StringBuilder();
 
@@ -123,18 +127,15 @@ public class ZipZap {
                 for (int i = start; i < encodedLength; i++) {
                     uncompressed.append(text.charAt(i));
                 }
-                
+
                 System.out.println("Replaced: " + uncompressed);
                 outFile.print(uncompressed);
 
             } else {
                 outFile.print((char) currentChar_int);
             }
-            //System.out.println((char) currentChar_int);
+            currentIndex++;
         }
-
-
-        System.out.println(text.substring(133, 133 + 8));
 
         //System.out.println(text);
 
