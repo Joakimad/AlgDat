@@ -21,7 +21,7 @@ public class ZipZap {
         outFile = new PrintWriter(new BufferedWriter(new FileWriter("src/Øving12/compressed/zipzap-" + infile)));
 
         int currentChar_int;
-        int matchId = 0;
+        int matchIndex = 0;
         String match = "";
 
         // Reads 1 char at the time until end of file.
@@ -30,14 +30,14 @@ public class ZipZap {
             char currentChar = (char) currentChar_int;
             int searchResult = searchBuffer.indexOf(match + currentChar);
 
-            // If not match is found in buffer add to buffer.
+            // If match replace text and update where to find textpiece
             if (searchResult != -1) {
                 match += currentChar;
-                matchId = searchResult;
+                matchIndex = searchResult;
 
             } else {
-                // Match found in buffer.
-                String encoded = "~" + matchId + "~" + match.length() + "~" + currentChar;
+                // Match not found in buffer. Encode
+                String encoded = "~" + matchIndex + "-" + match.length() + "~" + currentChar;
                 String originalText = match + currentChar;
 
                 //Check if encoded is shorter than original
@@ -45,24 +45,25 @@ public class ZipZap {
                     outFile.print(encoded);
                     searchBuffer.append(originalText);
                     match = "";
-                    matchId = 0;
+                    matchIndex = 0;
                 } else {
+                    // output one char at the time until new match.
                     match = originalText;
-                    matchId = -1;
-                    while (match.length() > 1 && matchId == -1) {
+                    matchIndex = -1;
+                    while (match.length() > 1 && matchIndex == -1) {
                         outFile.print(match.charAt(0));
                         searchBuffer.append(match.charAt(0));
                         match = match.substring(1);
-                        matchId = searchBuffer.indexOf(match);
+                        matchIndex = searchBuffer.indexOf(match);
                     }
                 }
                 trimSearchBuffer();
             }
         }
-        if (matchId != -1) {
-            String encoded = "~" + matchId + "~" + match.length();
+        if (matchIndex != -1) {
+            String encoded = "~" + matchIndex + "~" + match.length();
             if (encoded.length() <= match.length()) {
-                outFile.print("~" + matchId + "~" + match.length());
+                outFile.print("~" + matchIndex + "~" + match.length());
             } else {
                 outFile.print(match);
             }
@@ -78,54 +79,34 @@ public class ZipZap {
         inFile = new BufferedReader(new FileReader("src/Øving12/compressed/" + infile));
         outFile = new PrintWriter(new BufferedWriter(new FileWriter("src/Øving12/uncompressed/" + infile)));
 
-        StreamTokenizer st = new StreamTokenizer(inFile);
+        int currentChar_int;
 
-        st.ordinaryChar((int) ' ');
-        st.ordinaryChar((int) '.');
-        st.ordinaryChar((int) '-');
-        st.ordinaryChar((int) '\n');
-        st.wordChars((int) '\n', (int) '\n');
-        st.wordChars((int) ' ', (int) '}');
+        while ((currentChar_int = inFile.read()) != -1) {
 
-        int offset;
-        int length;
+            String tempString = "";
+            int encodedLookback = 0;
+            int encodedLength = 0;
 
-        while (st.nextToken() != StreamTokenizer.TT_EOF) {
-            switch (st.ttype) {
-                case StreamTokenizer.TT_WORD:
-                    searchBuffer.append(st.sval);
-                    outFile.print(st.sval);
-                    // Adjust search buffer size if necessary
-                    trimSearchBuffer();
-                    break;
-                case StreamTokenizer.TT_NUMBER:
-                    offset = (int) st.nval; // set the offset
-                    st.nextToken(); // get the separator (hopefully)
-                    if (st.ttype == StreamTokenizer.TT_WORD) {
-                        // we got a word instead of the separator,
-                        // therefore the first number read was actually part of a word
-                        searchBuffer.append(offset + st.sval);
-                        outFile.print(offset + st.sval);
-                        break; // break out of the switch
-                    }
-                    // if we got this far then we must be reading a
-                    // substitution pointer
-                    st.nextToken(); // get the length
-                    length = (int) st.nval;
-                    // output substring from search buffer
+            // Found encoded piece. Start decompressing.
+            if (currentChar_int == '~') {
+                while ((currentChar_int = inFile.read()) != '-') {
+                    tempString += (char) currentChar_int;
+                }
 
-                    if (offset + length < searchBuffer.length()) {
-                        String output = searchBuffer.substring(offset, offset + length);
-                        outFile.print(output);
-                        searchBuffer.append(output);
-                    }
-                    // Adjust search buffer size if necessary
-                    trimSearchBuffer();
-                    break;
-                default:
+                encodedLookback = Integer.parseInt(tempString);
+                tempString = "";
+
+                while ((currentChar_int = inFile.read()) != '~') {
+                    tempString += (char) currentChar_int;
+                }
+                encodedLength = Integer.parseInt(tempString);
+                System.out.println(encodedLookback + " - " + encodedLength);
+
+                //inFile.read();
+            } else {
+                outFile.print((char) currentChar_int);
             }
         }
-
         // close files
         inFile.close();
         outFile.flush();
