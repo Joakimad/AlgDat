@@ -23,12 +23,12 @@ public class ZipZap {
     int currentElement = -1;
     char[] Characters;
     ArrayList<Byte> output = new ArrayList<Byte>();
-    int divisionNumber = 2;
+    int divisionNumber = 4;
     byte[] inputBytes;
 
     public void compress(String infile) throws IOException {
 
-       Path path = Paths.get("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\testfiles\\" + infile);
+       Path path = Paths.get("C:\\Users\\jon-stasjonær\\IdeaProjects\\Joakim sin git 2 år\\src\\Øving12\\testfiles\\" + infile);
 
         inputBytes = Files.readAllBytes(path);
         int[] value = {-1, -1};
@@ -71,9 +71,9 @@ public class ZipZap {
         byte[] length = shortToByte(Length);
         System.out.println(length.length);
         System.out.println(order.toString());
+        int LengthPos = 0;
         for (int i = 0; i<order.length/2; i++){
-            int LengthPos = 0;
-            if(order[i*2] < 0) {
+            if(Order.get(i) < 0) {
                 output.add(order[i*2]);
                 output.add(order[(i*2)+1]);
                 int recentElement = currentElement;
@@ -87,19 +87,23 @@ public class ZipZap {
                 output.add(order[2*i]);
                 output.add(order[(2*i)+1]);
                 output.add(length[LengthPos*2]);
-                output.add(length[(LengthPos*2) +1])  ;
+                output.add(length[(LengthPos*2) +1]);
                 currentElement = currentElement + bytesToShort(length, LengthPos*2);;
-                LengthPos++;
+                LengthPos = LengthPos+1;
             }
         }
+        System.out.println(java.util.Arrays.toString(inputBytes));
+        System.out.println('\n');
         System.out.println(output.toString());
         System.out.println(Order.toString());
-        System.out.println(Length.toString());
+        System.out.println(java.util.Arrays.toString(order));
+        //System.out.println(Length.toString());
+        //System.out.println(java.util.Arrays.toString(length));
         byte[] outputArray = new byte[output.size()];
         for(int i = 0; i<output.size(); i++){
             outputArray[i] = output.get(i);
         }
-        try (FileOutputStream fos = new FileOutputStream("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\compressed\\" + infile)) {
+        try (FileOutputStream fos = new FileOutputStream("C:\\Users\\jon-stasjonær\\IdeaProjects\\Joakim sin git 2 år\\src\\Øving12\\compressed\\" + infile)) {
             fos.write(outputArray);
             //fos.close(); There is no more need for this line since you had created the instance of "fos" inside the try. And this will automatically close the OutputStream
         }
@@ -149,7 +153,7 @@ public class ZipZap {
 
     public void uncompress(String infile) throws IOException {
 
-        Path path = Paths.get("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\compressed\\" + infile);
+        Path path = Paths.get("C:\\Users\\jon-stasjonær\\IdeaProjects\\Joakim sin git 2 år\\src\\Øving12\\compressed\\" + infile);
 
         inputBytes = Files.readAllBytes(path);
         short convertedBytes = 0;
@@ -167,7 +171,6 @@ public class ZipZap {
             else {
                 int sizeBeforeAdd = output.size();
                 convertedLength = bytesToShort(inputBytes, currentElement+2);
-                convertedBytes = bytesToShort(inputBytes, currentElement);
                 currentElement = currentElement + 3;
                 for(int i = 0; i< convertedLength; i++){
                     output.add(output.get(sizeBeforeAdd-convertedBytes+i));
@@ -179,7 +182,10 @@ public class ZipZap {
         for(int i = 0; i<output.size(); i++){
             outputArray[i] = output.get(i);
         }
-        try (FileOutputStream fos = new FileOutputStream("C:\\Users\\Jon\\IdeaProjects\\Øving12\\src\\Øving12\\decompressed\\" + infile)) {
+        for (int i = 0; i<outputArray.length; i++){
+
+        }
+        try (FileOutputStream fos = new FileOutputStream("C:\\Users\\jon-stasjonær\\IdeaProjects\\Joakim sin git 2 år\\src\\Øving12\\decompressed\\" + infile)) {
             fos.write(outputArray);
             //fos.close(); There is no more need for this line since you had created the instance of "fos" inside the try. And this will automatically close the OutputStream
         }

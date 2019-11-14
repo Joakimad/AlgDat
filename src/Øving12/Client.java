@@ -1,6 +1,8 @@
 package Øving12;
 
+import java.awt.image.ShortLookupTable;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Client {
 
@@ -13,9 +15,8 @@ public class Client {
 
         try {
 
-           //zipzap.compress("testfile2.txt");
-           zipzap.uncompress("testfile2.txt");
-
+            //zipzap.compress("testfile3.pdf");
+            zipzap.uncompress("testfile1.pdf");
 
         } catch (IOException e) {
             e.printStackTrace();
