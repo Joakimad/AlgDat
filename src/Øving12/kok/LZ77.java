@@ -1,4 +1,4 @@
-package Øving12;
+package Øving12.kok;
 
 import org.apache.commons.io.IOUtils;
 

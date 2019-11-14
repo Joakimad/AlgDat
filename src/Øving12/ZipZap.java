@@ -1,148 +1,127 @@
 package Øving12;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class ZipZap {
 
-    private Reader inFile;
-    private PrintWriter outFile;
-    private int bufferSize = 65536;
-    private StringBuffer searchBuffer = new StringBuffer(bufferSize);
+    private byte[] bytesFromFile = new byte[0];
+    private byte[] out = new byte[0];
+    private int outputLength;
 
-    private void trimSearchBuffer() {
-        if (searchBuffer.length() > bufferSize) {
-            searchBuffer = searchBuffer.delete(0, searchBuffer.length() - bufferSize);
+    private void readFile(String infile) {
+        String path = "src/Øving12/testfiles/" + infile;
+        try {
+            bytesFromFile = Files.readAllBytes(Paths.get(path));
+        } catch (IOException e) {
+            System.out.println("Error reading file" + e);
+        }
+        out = new byte[bytesFromFile.length];
+    }
+
+    private void writeFile(String infile) throws IOException {
+        DataOutputStream dos = null;
+        try {
+            dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/compressed/testfile.zipzap")));
+            dos.write(out, 0, outputLength);
+        } catch (IOException e) {
+            System.out.println("Error with writing file: " + e);
+        } finally {
+            dos.close();
         }
     }
 
-    public void compress(String infile) throws IOException {
+    public void compress(String filename) throws IOException {
 
-        inFile = new BufferedReader(new FileReader("src/Øving12/testfiles/" + infile));
-        outFile = new PrintWriter(new BufferedWriter(new FileWriter("src/Øving12/compressed/zipzap-" + infile)));
+        readFile(filename);
 
-        int currentChar_int;
-        int matchIndex = 0;
-        String match = "";
-        int currentIndex = 0;
+        if (bytesFromFile.length == 0) {
+            System.out.println("Error reading file");
+        }
 
-        // Reads 1 char at the time until end of file.
-        while ((currentChar_int = inFile.read()) != -1) {
+        byte uncompressedCount = 0;
+        int uncompressedStartIndex = -1;
 
-            char currentChar = (char) currentChar_int;
-            int searchResult = searchBuffer.indexOf(match + currentChar);
+        for (int i = 0; i < bytesFromFile.length; i++) {
 
-            // If match replace text and update where to find textpiece
-            if (searchResult != -1) {
-                match += currentChar;
-                matchIndex = searchResult;
+            byte matchLength = 0;
+            int matchIndex = -1;
+            int encodedLength = outputLength + 2; // Reserve 2 bytes for offset and length
 
-            } else {
-                // Match not found in buffer. Encode
-                String encoded = "~" + matchIndex + "-" + match.length() + "~" + currentChar;
-                String originalText = match + currentChar;
+            // Searches for similar pattern 127 bytes behind itself.
+            int SEARCH_LENGTH = 127;
+            int searchStart = i - SEARCH_LENGTH;
+            if (searchStart < 0) {
+                searchStart = 0;
+            }
 
-                //Check if encoded is shorter than original
-                if (encoded.length() <= originalText.length()) {
-                    outFile.print(encoded);
-                    searchBuffer.append(originalText);
-                    match = "";
-                    matchIndex = 0;
-                } else {
-                    // output one char at the time until new match.
-                    match = originalText;
-                    matchIndex = -1;
-                    while (match.length() > 1 && matchIndex == -1) {
-                        outFile.print(match.charAt(0));
-                        searchBuffer.append(match.charAt(0));
-                        match = match.substring(1);
-                        matchIndex = searchBuffer.indexOf(match);
+            byte MATCH_LENGTH = 5;
+            for (int j = searchStart; j < i; j++) {
+
+                if (i + matchLength >= bytesFromFile.length) {
+                    break;
+                }
+
+                if (bytesFromFile[j] == bytesFromFile[i + matchLength]) {
+                    if (matchIndex == -1) {
+                        matchIndex = j;
                     }
+
+                    matchLength++;
+                    out[encodedLength++] = bytesFromFile[j];
+
+                } else if (matchIndex != -1) {
+                    if (matchLength >= MATCH_LENGTH) {
+                        break;
+                    }
+                    // Reset
+                    matchIndex = -1;
+                    matchLength = 0;
                 }
-                trimSearchBuffer();
             }
-            currentIndex++;
-        }
-        if (matchIndex != -1) {
-            String encoded = "~" + matchIndex + "~" + match.length();
-            if (encoded.length() <= match.length()) {
-                outFile.print("~" + matchIndex + "~" + match.length());
+
+            // Any matches?
+            if (matchIndex != -1 && matchLength >= MATCH_LENGTH) {
+                if (uncompressedCount > 0) {
+
+                    out[uncompressedStartIndex] = (byte) -uncompressedCount;
+                    uncompressedStartIndex = -1;
+                    uncompressedCount = 0;
+                    outputLength++;
+                }
+
+                out[outputLength++] = matchLength;
+                out[outputLength++] = (byte) (i - matchIndex);
+
+                i += matchLength - 1; // -1 because i++ in for-loop
             } else {
-                outFile.print(match);
+                // Didn't find any matches, uncompressed
+                // Set uncompressed start
+                if (uncompressedStartIndex == -1) {
+                    uncompressedStartIndex = outputLength;
+                }
+                uncompressedCount++;
+                out[++outputLength] = bytesFromFile[i]; // Reserve 1 byte for length
+            }
+
+            // Check if uncompressed block is full
+            if (uncompressedCount == 127) {
+                // Finish block and reset counters
+                out[uncompressedStartIndex] = -127;
+                uncompressedStartIndex = -1;
+                uncompressedCount = 0;
+                outputLength++; // 1 byte for length
             }
         }
 
-        // close files
-        inFile.close();
-        outFile.flush();
-        outFile.close();
-    }
-
-    public void uncompress(String infile) throws IOException {
-
-        inFile = new BufferedReader(new FileReader("src/Øving12/compressed/" + infile));
-        outFile = new PrintWriter(new BufferedWriter(new FileWriter("src/Øving12/uncompressed/" + infile)));
-
-        int currentChar_int;
-        StringBuilder text = new StringBuilder();
-        int encodedIndex;
-        int encodedLength;
-        int currentIndex = 0;
-
-        // Parse through file char by char.
-        while ((currentChar_int = inFile.read()) != -1) {
-
-            text.append((char) currentChar_int);
-            searchBuffer.append((char) currentChar_int);
-
-            StringBuilder tempString = new StringBuilder();
-
-            // Found encoded piece. Finding lookback and length of string.
-            if (currentChar_int == '~') {
-
-                while ((currentChar_int = inFile.read()) != '-') {
-                    text.append((char) currentChar_int);
-                    tempString.append((char) currentChar_int);
-                }
-                text.append((char) currentChar_int);
-
-                encodedIndex = Integer.parseInt(tempString.toString());
-                tempString = new StringBuilder();
-
-                while ((currentChar_int = inFile.read()) != '~') {
-                    text.append((char) currentChar_int);
-                    tempString.append((char) currentChar_int);
-                }
-                text.append((char) currentChar_int);
-
-                encodedLength = Integer.parseInt(tempString.toString());
-
-                System.out.println(encodedIndex + " - " + encodedLength);
-
-                int start = encodedIndex;
-
-                System.out.println("Start: " + start);
-
-                //Replaces the encoded text with the actual text.
-                StringBuilder uncompressed = new StringBuilder();
-                for (int i = start; i < encodedLength; i++) {
-                    uncompressed.append(text.charAt(i));
-                }
-
-                System.out.println("Replaced: " + uncompressed);
-                outFile.print(uncompressed);
-
-            } else {
-                outFile.print((char) currentChar_int);
-            }
-            currentIndex++;
+        // Check if any leftover uncompressed data
+        if (uncompressedCount > 0) {
+            // Finish block
+            out[uncompressedStartIndex] = (byte) -uncompressedCount;
+            outputLength++; // 1 byte for length
         }
-
-        //System.out.println(text);
-
-        // close files
-        inFile.close();
-        outFile.flush();
-        outFile.close();
+        writeFile(filename);
     }
 }
 
