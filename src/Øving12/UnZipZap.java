@@ -13,12 +13,14 @@ public class UnZipZap {
     public void decompress(String filename) throws IOException {
 
         readFile(filename);
+
         for (int i = 0; i < input.length; i++) {
             byte currentByte = input[i];
             if (currentByte > 0) {
                 // Compressed data
                 byte length = currentByte;
-                byte offset = input[++i];
+                byte offset = input[i++];
+
                 int startIndex = outputLength - offset;
                 if (startIndex < 0) {
                     System.out.println("Error! Negative start index!");
@@ -30,7 +32,7 @@ public class UnZipZap {
                 }
 
                 for (int j = startIndex; j < startIndex + length; j++) {
-                    output[outputLength++] = output[i];
+                    output[outputLength++] = output[j];
                 }
 
             } else if (currentByte < 0) {
@@ -51,7 +53,7 @@ public class UnZipZap {
     }
 
     private void readFile(String filename) {
-        String path = "src/Øving12/testfiles/" + filename;
+        String path = "src/Øving12/compressed/" + filename;
         try {
             input = Files.readAllBytes(Paths.get(path));
         } catch (IOException e) {
@@ -65,8 +67,8 @@ public class UnZipZap {
         try {
             dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/uncompressed/" + filename)));
             dos.write(output, 0, outputLength);
-        } catch (IOException ioe) {
-            System.out.println("Error with writing file: " + ioe);
+        } catch (IOException e) {
+            System.out.println("Error with writing file: " + e);
         } finally {
             dos.close();
         }

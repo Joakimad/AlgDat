@@ -35,6 +35,7 @@ public class ZipZap2 {
     public void compress(String filename) throws IOException {
 
         readFile(filename);
+
         if (bytesFromFile.length == 0) {
             System.out.println("Error reading file");
         }

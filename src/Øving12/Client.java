@@ -12,17 +12,15 @@ public class Client {
         ZipZap zipzap = new ZipZap();
         ZipZap2 zipzap2 = new ZipZap2();
         UnZipZap unzipzap = new UnZipZap();
+        LZ77Decompress lz = new LZ77Decompress();
 
-        try {
+        //zipzap.compress("testfile2.txt");
+        //zipzap.uncompress("zipzap-testfile2.txt");
 
-            //zipzap.compress("testfile2.txt");
-            //zipzap.uncompress("zipzap-testfile2.txt");
+        //zipzap2.compress("testfile2.txt");
+        //unzipzap.decompress("testfile2.txt");
 
-            zipzap2.compress("testfile2.txt");
-            unzipzap.decompress("testfile2.txt");
+        lz.decompress();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
