@@ -10,12 +10,16 @@ public class Client {
 
         //testfile2 = 11 448 bytes
         ZipZap zipzap = new ZipZap();
+        ZipZap2 zipzap2 = new ZipZap2();
+        UnZipZap unzipzap = new UnZipZap();
 
         try {
 
-            zipzap.compress("testfile2.txt");
-            zipzap.uncompress("zipzap-testfile2.txt");
+            //zipzap.compress("testfile2.txt");
+            //zipzap.uncompress("zipzap-testfile2.txt");
 
+            zipzap2.compress("testfile2.txt");
+            unzipzap.decompress("testfile2.txt");
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -6,7 +6,7 @@ public class ZipZap {
 
     private Reader inFile;
     private PrintWriter outFile;
-    private int bufferSize = 1024;
+    private int bufferSize = 65536;
     private StringBuffer searchBuffer = new StringBuffer(bufferSize);
 
     private void trimSearchBuffer() {
@@ -34,7 +34,7 @@ public class ZipZap {
             // If match replace text and update where to find textpiece
             if (searchResult != -1) {
                 match += currentChar;
-                matchIndex = searchResult - match.length();
+                matchIndex = searchResult;
 
             } else {
                 // Match not found in buffer. Encode
