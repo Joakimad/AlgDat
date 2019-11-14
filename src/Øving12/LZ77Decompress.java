@@ -17,7 +17,7 @@ public class LZ77Decompress {
     }
 
     public void run() throws IOException {
-        String path = "src/Øving12/compressed/testfile2.txt";
+        String path = "src/Øving12/compressed/testfile.zipzap";
         readFile(path);
         decompress();
         writeFile();
@@ -79,11 +79,12 @@ public class LZ77Decompress {
     public void writeFile() throws IOException {
         DataOutputStream dos = null;
         try {
-            dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(fileName.replace(".compressed", ".decompressed"))));
+            dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/uncompressed/testfile.txt")));
             dos.write(output, 0, outputLength);
         } catch(IOException ioe) {
             System.out.println("Error with writing file: " + ioe);
         } finally {
+            assert dos != null;
             dos.close();
         }
     }

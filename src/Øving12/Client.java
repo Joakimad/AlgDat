@@ -12,7 +12,11 @@ public class Client {
         ZipZap zipzap = new ZipZap();
         ZipZap2 zipzap2 = new ZipZap2();
         UnZipZap unzipzap = new UnZipZap();
-        LZ77Decompress lz = new LZ77Decompress();
+
+        LZ77 lz = new LZ77();
+        LZ77Decompress unlz = new LZ77Decompress();
+
+
 
         //zipzap.compress("testfile2.txt");
         //zipzap.uncompress("zipzap-testfile2.txt");
@@ -20,7 +24,8 @@ public class Client {
         //zipzap2.compress("testfile2.txt");
         //unzipzap.decompress("testfile2.txt");
 
-        lz.decompress();
+
+
 
     }
 }
