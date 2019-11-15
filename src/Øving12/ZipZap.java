@@ -25,12 +25,20 @@ public class ZipZap {
     ArrayList<Byte> output = new ArrayList<Byte>();
     int divisionNumber = 4;
     byte[] inputBytes;
+    byte[] inputBytes2;
+    int orderCounter = -1;
+    int lengthCounter = -1;
+    int inputCounter = 0;
 
     public void compress(String infile) throws IOException {
 
        Path path = Paths.get("C:\\Users\\jon-stasjonær\\IdeaProjects\\Joakim sin git 2 år\\src\\Øving12\\testfiles\\" + infile);
 
         inputBytes = Files.readAllBytes(path);
+        inputBytes2 = new byte[inputBytes.length];
+        for(int i = 0; i<inputBytes.length; i++){
+            inputBytes2[i] = inputBytes[i];
+        }
         int[] value = {-1, -1};
         short counter = 0;
         for (currentElement = 0; currentElement< inputBytes.length; currentElement++){
@@ -94,7 +102,7 @@ public class ZipZap {
         }
         //System.out.println(java.util.Arrays.toString(inputBytes));
         //System.out.println('\n');
-        System.out.println(output.toString());
+        //System.out.println(output.toString());
         System.out.println(Order.toString());
         System.out.println(java.util.Arrays.toString(order));
         System.out.println(Length.toString());
@@ -152,7 +160,8 @@ public class ZipZap {
     }
 
     public void uncompress(String infile) throws IOException {
-
+        output = new ArrayList<>();
+        currentElement = -1;
         Path path = Paths.get("C:\\Users\\jon-stasjonær\\IdeaProjects\\Joakim sin git 2 år\\src\\Øving12\\compressed\\" + infile);
 
         inputBytes = Files.readAllBytes(path);
@@ -160,20 +169,26 @@ public class ZipZap {
         short convertedLength = 0;
         for (currentElement = 0; currentElement<inputBytes.length-1; currentElement++){
             convertedBytes = bytesToShort(inputBytes, currentElement);
+            orderCounter++;
             if(convertedBytes<0){
                 currentElement = currentElement + 2;
                 int recentElement = currentElement;
                 for(currentElement = currentElement; currentElement < recentElement - convertedBytes; currentElement++) {
                     output.add(inputBytes[currentElement]);
+                    testDecompression(convertedBytes, convertedLength);
+                    inputCounter++;
                 }
                 currentElement--;
             }
             else {
                 int sizeBeforeAdd = output.size();
                 convertedLength = bytesToShort(inputBytes, currentElement+2);
+                lengthCounter++;
                 currentElement = currentElement + 3;
                 for(int i = 0; i< convertedLength; i++){
                     output.add(output.get(sizeBeforeAdd-convertedBytes+i));
+                    testDecompression(convertedBytes, convertedLength);
+                    inputCounter++;
                 }
             }
         }
@@ -190,6 +205,15 @@ public class ZipZap {
             //fos.close(); There is no more need for this line since you had created the instance of "fos" inside the try. And this will automatically close the OutputStream
         }
     }
+
+    public void testDecompression(short orderElement, short lengthElement){
+        if(!(output.get(output.size()-1) == inputBytes2[inputCounter])) System.out.println("feil input i posisjon " + inputCounter + " input " + inputBytes2[inputCounter] + " output " + output.get(output.size() -1) + " the order is " + orderElement + " the length is " + lengthElement);
+        if(orderElement != Order.get(orderCounter)) System.out.println("feil order motatt i " + orderCounter + " orderElement " + orderElement + " Order " + Order.get(orderCounter));
+        if(lengthCounter > -1) {
+            if (lengthElement != Length.get(lengthCounter)) System.out.println("feil Length motatt i " + lengthCounter + " orderElement " + lengthElement + " Order " + Length.get(lengthCounter));
+            }
+        if (orderElement<lengthElement && orderElement>-1) System.out.println("lengthelement høyere enn orderlement" + lengthElement + " " + orderElement + " orderelement posisjon " + orderCounter +" element og forrige elementer " + Order.get(orderCounter) + Order.get(orderCounter-1) + Order.get(orderElement-2));
+        }
 }
 
 

@@ -90,7 +90,7 @@ class CircularBuffer
             }
         }
         else{
-            for (int i = 0; i < bufLen; i++){
+            for (int i = 1; i < bufLen; i++){
                 if (buf[i] == search) posisjoner.add(i);
             }
         }
@@ -114,19 +114,20 @@ class CircularBuffer
 
     public int returnPosition(int length, ArrayList<Integer> positions) {
         int pos = positions.get(0);
-        int rear2 = rear % maxSize;
         if (pos-length > 0 ){
             pos = pos-length;
         }
         else {
             pos = maxSize + pos - length;
+            //System.out.println("in the else");
         }
-        if( rear2 - pos > 0) {
-            return rear2 - pos;
+        if( rear - pos > 0) {
+            return rear - pos;
         }
 
+
         else {
-            return rear2 + maxSize - pos;
+            return rear + maxSize - pos;
         }
     }
 }

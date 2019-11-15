@@ -15,7 +15,7 @@ public class Client {
 
         try {
 
-            //zipzap.compress("testfile3.pdf");
+            zipzap.compress("testfile3.pdf");
             zipzap.uncompress("testfile3.pdf");
 
         } catch (IOException e) {
