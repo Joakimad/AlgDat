@@ -31,6 +31,7 @@ public class ZipZap {
             // Iterate through search area.
             for (int j = searchStart; j < i; j++) {
 
+                // Check for end of file.
                 if (i + matchLength >= bytesFromFile.length) {
                     break;
                 }
