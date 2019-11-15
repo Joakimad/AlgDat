@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 
 public class ZipZap {
 
-    private final byte MAX_MATCH_LENGTH = 5;
+    private final byte MATCH_LENGTH = 3;
 
     private byte[] bytesFromFile = new byte[0];
     private byte[] bytesToFile = new byte[0];
@@ -34,18 +34,17 @@ public class ZipZap {
                     break;
 
                 if (bytesFromFile[j] == bytesFromFile[i + matchLength]) {
-                    if (matchIndex == -1) matchIndex = j;
+                    if (matchIndex == -1) {
+                        matchIndex = j;
+                    }
+
                     matchLength++;
-                    if (newOutputLength >= bytesToFile.length) {
-                        System.out.println("Error");
-                    }
-                    if (j >= bytesFromFile.length) {
-                        System.out.println("Error");
-                    }
+
                     bytesToFile[newOutputLength++] = bytesFromFile[j];
+
                 } else if (matchIndex != -1) {
-                    if (matchLength >= MAX_MATCH_LENGTH) {
-                        // Long enough, return
+
+                    if (matchLength >= MATCH_LENGTH) {
                         break;
                     }
                     // Reset
@@ -55,7 +54,7 @@ public class ZipZap {
             }
 
             // Check for matches
-            if (matchIndex != -1 && matchLength >= MAX_MATCH_LENGTH) {
+            if (matchIndex != -1 && matchLength >= MATCH_LENGTH) {
                 if (uncompressedCount > 0) {
 
                     bytesToFile[uncompressedStartIndex] = (byte) -uncompressedCount;

@@ -1,4 +1,4 @@
-package Øving12.kok;
+package Øving12.trash;
 
 import org.apache.commons.io.IOUtils;
 

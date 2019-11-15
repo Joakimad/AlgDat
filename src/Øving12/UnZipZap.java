@@ -21,17 +21,16 @@ public class UnZipZap {
         // Iterate through byte array
         for (int i = 0; i < bytesFromFile.length; i++) {
             byte currentByte = bytesFromFile[i];
+
+            // Checks if byte is negative or positive to determine if its compressed or not.
+
+            // Compressed data
             if (currentByte > 0) {
-                // Compressed data
                 byte length = currentByte;
                 byte offset = bytesFromFile[++i];
                 int startIndex = outputLength - offset;
-                if (startIndex < 0) {
-                    System.out.println("Error! Negative start index!");
-                }
 
                 if (startIndex + length >= bytesToFile.length) {
-                    System.out.println("Error");
                     break;
                 }
 
@@ -39,8 +38,8 @@ public class UnZipZap {
                     bytesToFile[outputLength++] = bytesToFile[j];
                 }
 
-            } else if (currentByte < 0) {
                 // Uncompressed data
+            } else if (currentByte < 0) {
                 int length = -currentByte;
                 for (int j = i + 1; j <= i + length; j++) {
                     bytesToFile[outputLength++] = bytesFromFile[j];
