@@ -19,8 +19,8 @@ class CircularBuffer
     public CircularBuffer(int size)
     {
         maxSize = size;
-        front = rear = 0;
-        rear = 0;
+        front = rear = -1;
+        rear = -1;
         bufLen = 0;
         buf = new byte[maxSize];
     }
@@ -56,7 +56,6 @@ class CircularBuffer
         bufLen++;
         rear = (rear + 1) % maxSize;
         buf[rear] = c;
-
     }
     /** delete an element **/
     public byte delete()
@@ -90,7 +89,7 @@ class CircularBuffer
             }
         }
         else{
-            for (int i = 1; i < bufLen; i++){
+            for (int i = 0; i < bufLen; i++){
                 if (buf[i] == search) posisjoner.add(i);
             }
         }
@@ -101,7 +100,7 @@ class CircularBuffer
         ArrayList<Integer> posNew = new ArrayList<>();
         if(bufLen==maxSize) {
             for (int i = 0; i < positions.size(); i++) {
-                if (buf[(positions.get(i) + 1) % maxSize] == search) posNew.add(positions.get(i) + 1);
+                if (buf[(positions.get(i) + 1) % maxSize] == search && positions.get(i) + 1 != rear + 1) posNew.add(positions.get(i) + 1);
             }
         }
         else {
@@ -113,6 +112,9 @@ class CircularBuffer
     }
 
     public int returnPosition(int length, ArrayList<Integer> positions) {
+        if (length == 34 && (rear + maxSize - (maxSize + positions.get(0) - length)) == 33) {
+            System.out.println("here maybe");
+        }
         int pos = positions.get(0);
         if (pos-length > 0 ){
             pos = pos-length;
