@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 
 public class UnZipZap {
 
-    private byte[] input;
-    private byte[] output;
+    private byte[] bytesFromFile;
+    private byte[] bytesToFile;
     private int outputLength;
 
     public void decompress(String filename) {
@@ -18,34 +18,34 @@ public class UnZipZap {
         // Reads file and populates input array and size of output array
         readFile(filename);
 
-        System.out.println("INPUT SIZE: " + input.length);
-        System.out.println("OUTPUT SIZE: " + output.length);
+        // Iterate through byte array
+        for (int i = 0; i < bytesFromFile.length; i++) {
 
-        for (int i = 0; i < input.length; i++) {
-            byte currentByte = input[i];
+            byte currentByte = bytesFromFile[i];
+
             if (currentByte > 0) {
                 // Compressed data
                 byte length = currentByte;
-                byte offset = input[++i];
+                byte offset = bytesFromFile[++i];
                 int startIndex = outputLength - offset;
                 if (startIndex < 0) {
                     System.out.println("Error! Negative start index!");
                 }
 
-                if (startIndex + length >= output.length) {
+                if (startIndex + length >= bytesToFile.length) {
                     System.out.println("Error");
                     break;
                 }
 
                 for (int j = startIndex; j < startIndex + length; j++) {
-                    output[outputLength++] = output[j];
+                    bytesToFile[outputLength++] = bytesToFile[j];
                 }
 
             } else if (currentByte < 0) {
                 // Uncompressed data
                 int length = -currentByte;
                 for (int j = i + 1; j <= i + length; j++) {
-                    output[outputLength++] = input[j];
+                    bytesToFile[outputLength++] = bytesFromFile[j];
                 }
                 i += length;
             } else {
@@ -58,16 +58,16 @@ public class UnZipZap {
     private void readFile(String filename) {
         String path = "src/Øving12/compressed/" + filename;
         try {
-            input = Files.readAllBytes(Paths.get(path));
+            bytesFromFile = Files.readAllBytes(Paths.get(path));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        output = new byte[input.length * 5];
+        bytesToFile = new byte[bytesFromFile.length * 5];
     }
 
     private void writeFile() {
         try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/uncompressed/testfile.txt")))) {
-            dos.write(output, 0, outputLength);
+            dos.write(bytesToFile, 0, outputLength);
         } catch (IOException e) {
             e.printStackTrace();
         }
