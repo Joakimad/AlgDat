@@ -23,26 +23,26 @@ public class UnZipZap {
 
             byte currentByte = bytesFromFile[i];
 
+            // Compressed data
             if (currentByte > 0) {
-                // Compressed data
-                byte length = currentByte;
                 byte offset = bytesFromFile[++i];
                 int startIndex = outputLength - offset;
+
                 if (startIndex < 0) {
                     System.out.println("Error! Negative start index!");
                 }
 
-                if (startIndex + length >= bytesToFile.length) {
+                if (startIndex + currentByte >= bytesToFile.length) {
                     System.out.println("Error");
                     break;
                 }
 
-                for (int j = startIndex; j < startIndex + length; j++) {
+                for (int j = startIndex; j < startIndex + currentByte; j++) {
                     bytesToFile[outputLength++] = bytesToFile[j];
                 }
 
-            } else if (currentByte < 0) {
                 // Uncompressed data
+            } else if (currentByte < 0) {
                 int length = -currentByte;
                 for (int j = i + 1; j <= i + length; j++) {
                     bytesToFile[outputLength++] = bytesFromFile[j];
@@ -53,6 +53,7 @@ public class UnZipZap {
             }
         }
         writeFile();
+        System.out.println("Decompressed!");
     }
 
     private void readFile(String filename) {
@@ -62,11 +63,11 @@ public class UnZipZap {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        bytesToFile = new byte[bytesFromFile.length * 5];
+        bytesToFile = new byte[bytesFromFile.length * 2];
     }
 
     private void writeFile() {
-        try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/uncompressed/testfile.txt")))) {
+        try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/uncompressed/testfile")))) {
             dos.write(bytesToFile, 0, outputLength);
         } catch (IOException e) {
             e.printStackTrace();

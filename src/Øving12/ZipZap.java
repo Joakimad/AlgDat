@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 
 public class ZipZap {
 
-    private static final byte MATCH_LENGTH = 5;
+    private final byte MAX_MATCH_LENGTH = 5;
 
     private byte[] bytesFromFile = new byte[0];
     private byte[] bytesToFile = new byte[0];
@@ -22,13 +22,13 @@ public class ZipZap {
         for (int i = 0; i < bytesFromFile.length; i++) {
 
             byte matchLength = 0;
-            int matchIndex = -1;
+            int index_of_match = -1;
             int encodedLength = outputLength + 2; // Reserve 2 bytes for offset and length
 
             // Searches for similar pattern 127 bytes behind itself.
             final int searchStart = Math.max(0, i - 127);
 
-
+            // Iterate through search area.
             for (int j = searchStart; j < i; j++) {
 
                 if (i + matchLength >= bytesFromFile.length) {
@@ -36,25 +36,26 @@ public class ZipZap {
                 }
 
                 if (bytesFromFile[j] == bytesFromFile[i + matchLength]) {
-                    if (matchIndex == -1) {
-                        matchIndex = j;
+                    if (index_of_match == -1) {
+                        index_of_match = j;
                     }
 
                     matchLength++;
                     bytesToFile[encodedLength++] = bytesFromFile[j];
 
-                } else if (matchIndex != -1) {
-                    if (matchLength >= MATCH_LENGTH) {
+                } else if (index_of_match != -1) {
+                    if (matchLength >= MAX_MATCH_LENGTH) {
                         break;
                     }
+
                     // Reset
-                    matchIndex = -1;
+                    index_of_match = -1;
                     matchLength = 0;
                 }
             }
 
-            // Any matches?
-            if (matchIndex != -1 && matchLength >= MATCH_LENGTH) {
+            // Check for matches
+            if (index_of_match != -1 && matchLength >= MAX_MATCH_LENGTH) {
                 if (uncompressedCount > 0) {
 
                     bytesToFile[uncompressedStartIndex] = (byte) -uncompressedCount;
@@ -64,7 +65,8 @@ public class ZipZap {
                 }
 
                 bytesToFile[outputLength++] = matchLength;
-                bytesToFile[outputLength++] = (byte) (i - matchIndex);
+
+                bytesToFile[outputLength++] = (byte) (i - index_of_match);
 
                 i += matchLength - 1; // -1 because i++ in for-loop
             } else {
@@ -96,6 +98,7 @@ public class ZipZap {
 
         // Write to new compressed file.
         writeFile();
+        System.out.println("Compressed!");
     }
 
     private void readFile(String infile) {
@@ -105,7 +108,7 @@ public class ZipZap {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        bytesToFile = new byte[bytesFromFile.length];
+        bytesToFile = new byte[bytesFromFile.length * 2];
     }
 
     private void writeFile() {
@@ -114,6 +117,19 @@ public class ZipZap {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void extendByteArrIfFull() {
+        for (int i = 0; i < bytesToFile.length; i++)
+            if (i == bytesFromFile.length - 1) {
+                resize();
+            }
+    }
+
+    private void resize() {
+        byte[] tmp = new byte[bytesToFile.length + 1];
+        System.arraycopy(tmp, 0, bytesToFile, 0, bytesToFile.length);
+        bytesToFile = tmp;
     }
 }
 
