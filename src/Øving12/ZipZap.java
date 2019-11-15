@@ -16,7 +16,7 @@ public class ZipZap {
 
         readFile(filename);
 
-        byte uncompressedCount = 0;
+        byte compressedCount = 0;
         int uncompressedStartIndex = -1;
 
         for (int i = 0; i < bytesFromFile.length; i++) {
@@ -26,7 +26,11 @@ public class ZipZap {
             int newOutputLength = outputLength + 2; // Reserve 2 bytes for offset and length
 
             // Searches for similar pattern 127 bytes behind itself.
-            final int searchStart = Math.max(0, i - 127);
+            // Cannot be negative.
+            int searchStart = i - 127;
+            if (searchStart < 0) {
+                searchStart = 0;
+            }
 
             // Iterate through search area.
             for (int j = searchStart; j < i; j++) {
@@ -53,44 +57,48 @@ public class ZipZap {
                 }
             }
 
-            // Check for matches
+            // If Match found.
             if (matchIndex != -1 && matchLength >= MATCH_LENGTH) {
-                if (uncompressedCount > 0) {
+                if (compressedCount > 0) {
 
-                    bytesToFile[uncompressedStartIndex] = (byte) -uncompressedCount;
+                    bytesToFile[uncompressedStartIndex] = (byte) -compressedCount;
                     uncompressedStartIndex = -1;
-                    uncompressedCount = 0;
+                    compressedCount = 0;
                     outputLength++;
                 }
 
-                bytesToFile[outputLength++] = matchLength;
-                bytesToFile[outputLength++] = (byte) (i - matchIndex);
+                bytesToFile[outputLength] = matchLength;
+                outputLength++;
+                bytesToFile[outputLength] = (byte) (i - matchIndex);
+                outputLength++;
 
-                i += matchLength - 1; // -1 because i++ in for-loop
+                // -1 because i++ in for-loop
+                i += matchLength - 1;
+
             } else {
-                // Didn't find any matches, uncompressed
-                // Set uncompressed start
+                // Didn't find any matches
                 if (uncompressedStartIndex == -1) {
                     uncompressedStartIndex = outputLength;
                 }
-                uncompressedCount++;
+                compressedCount++;
                 bytesToFile[++outputLength] = bytesFromFile[i]; // Reserve 1 byte for length
             }
 
             // Check if uncompressed block is full
-            if (uncompressedCount == 127) {
+            if (compressedCount == 127) {
+
                 // Finish block and reset counters
                 bytesToFile[uncompressedStartIndex] = -127;
                 uncompressedStartIndex = -1;
-                uncompressedCount = 0;
+                compressedCount = 0;
                 outputLength++; // 1 byte for length
             }
         }
 
         // Check if any leftover uncompressed data
-        if (uncompressedCount > 0) {
+        if (compressedCount > 0) {
             // Finish block
-            bytesToFile[uncompressedStartIndex] = (byte) -uncompressedCount;
+            bytesToFile[uncompressedStartIndex] = (byte) -compressedCount;
             outputLength++; // 1 byte for length
         }
 
@@ -115,19 +123,6 @@ public class ZipZap {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void extendByteArrIfFull() {
-        for (int i = 0; i < bytesToFile.length; i++)
-            if (i == bytesFromFile.length - 1) {
-                resize();
-            }
-    }
-
-    private void resize() {
-        byte[] tmp = new byte[bytesToFile.length + 1];
-        System.arraycopy(tmp, 0, bytesToFile, 0, bytesToFile.length);
-        bytesToFile = tmp;
     }
 }
 

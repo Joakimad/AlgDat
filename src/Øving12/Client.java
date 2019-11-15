@@ -10,7 +10,7 @@ public class Client {
         ZipZap zipzap = new ZipZap();
         UnZipZap unzipzap = new UnZipZap();
 
-        zipzap.compress("testfile2.txt");
+        //zipzap.compress("testfile2.txt");
         unzipzap.decompress("testfile.zipzap");
     }
 }

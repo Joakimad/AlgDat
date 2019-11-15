@@ -73,7 +73,7 @@ public class LZ77Decompress {
         } catch (IOException ioe) {
             System.out.println("Error with reading file: " + ioe);
         } finally {
-            output = new byte[input.length*5];
+            output = new byte[input.length * 5];
         }
     }
 
