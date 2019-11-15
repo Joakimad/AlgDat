@@ -207,7 +207,7 @@ public class ZipZap {
     }
 
     public void testDecompression(short orderElement, short lengthElement){
-        if(!(output.get(output.size()-1) == inputBytes2[inputCounter])) System.out.println("feil input i posisjon " + inputCounter + " input " + inputBytes2[inputCounter] + " output " + output.get(output.size() -1) + " the order is " + orderElement + " the length is " + lengthElement);
+        if(!(output.get(output.size()-1) == inputBytes2[inputCounter])) System.out.println("feil input i posisjon " + inputCounter + " input " + inputBytes2[inputCounter] + " output " + output.get(output.size() -1) + " the order is " + orderElement + " the length is " + lengthElement + " the posistion of order is " + orderCounter);
         if(orderElement != Order.get(orderCounter)) System.out.println("feil order motatt i " + orderCounter + " orderElement " + orderElement + " Order " + Order.get(orderCounter));
         if(lengthCounter > -1) {
             if (lengthElement != Length.get(lengthCounter)) System.out.println("feil Length motatt i " + lengthCounter + " orderElement " + lengthElement + " Order " + Length.get(lengthCounter));
