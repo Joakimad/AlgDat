@@ -18,7 +18,7 @@ public class LZ77 {
     }
 
     public void run() throws IOException {
-        String path = "src/Øving12/testfiles/testfile2.txt";
+        String path = "src/Øving12/testfiles/testfile4.txt";
         readFile(path);
         compress();
         writeFile();
@@ -129,7 +129,7 @@ public class LZ77 {
     public void writeFile() throws IOException {
         DataOutputStream dos = null;
         try {
-            dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/compressed/testfile.zipzap")));
+            dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/compressed/kok-testfile.zipzap")));
             dos.write(output, 0, outputLength);
         } catch(IOException ioe) {
             System.out.println("Error with writing file: " + ioe);

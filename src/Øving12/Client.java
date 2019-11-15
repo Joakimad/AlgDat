@@ -1,5 +1,7 @@
 package Øving12;
 
+import java.io.IOException;
+
 public class Client {
 
     public static void main(String[] args) {
@@ -8,8 +10,11 @@ public class Client {
         ZipZap zipzap = new ZipZap();
         UnZipZap unzipzap = new UnZipZap();
 
-        //zipzap.compress("testfile2.txt");
-        //unzipzap.decompress("testfile2.txt");
-
+        try {
+            zipzap.compress("testfile4.txt");
+            unzipzap.decompress("testfile.zipzap");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

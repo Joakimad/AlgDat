@@ -17,7 +17,7 @@ public class LZ77Decompress {
     }
 
     public void run() throws IOException {
-        String path = "src/Øving12/compressed/testfile.zipzap";
+        String path = "src/Øving12/compressed/kok-testfile.zipzap";
         readFile(path);
         decompress();
         writeFile();
@@ -26,22 +26,12 @@ public class LZ77Decompress {
         listArrays();
     }
 
-    public void readFile(String fileName) throws IOException {
-        this.fileName = fileName;
-        DataInputStream dis = null;
-        try {
-            dis = new DataInputStream(new BufferedInputStream(new FileInputStream(fileName)));
-            input = IOUtils.toByteArray(dis);
-        } catch(IOException ioe) {
-            System.out.println("Error with reading file: " + ioe);
-        } finally {
-            dis.close();
-            output = new byte[input.length*5];
-        }
-    }
-
     public void decompress() {
-        for(int i = 0; i < input.length; i++) {
+
+        System.out.println("INPUT SIZE: " + input.length);
+        System.out.println("OUTPUT SIZE: " + output.length);
+
+        for (int i = 0; i < input.length; i++) {
             byte currentByte = input[i];
             if (currentByte > 0) {
                 // Compressed data
@@ -52,7 +42,7 @@ public class LZ77Decompress {
                     System.out.println("Error! Negative start index!");
                 }
 
-                if(startIndex + length >= output.length) {
+                if (startIndex + length >= output.length) {
                     System.out.println("Error");
                     break;
                 }
@@ -62,9 +52,9 @@ public class LZ77Decompress {
                 }
                 System.out.println(i + ": " + convertToString(output, outputLength - length, length));
 
-            } else if(currentByte < 0) {
+            } else if (currentByte < 0) {
                 // Uncompressed data
-                int length =- currentByte;
+                int length = -currentByte;
                 for (int j = i + 1; j <= i + length; j++) {
                     output[outputLength++] = input[j];
                 }
@@ -76,12 +66,23 @@ public class LZ77Decompress {
         }
     }
 
-    public void writeFile() throws IOException {
+    private void readFile(String fileName) throws IOException {
+        this.fileName = fileName;
+        try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(fileName)))) {
+            input = IOUtils.toByteArray(dis);
+        } catch (IOException ioe) {
+            System.out.println("Error with reading file: " + ioe);
+        } finally {
+            output = new byte[input.length*5];
+        }
+    }
+
+    private void writeFile() throws IOException {
         DataOutputStream dos = null;
         try {
-            dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/uncompressed/testfile.txt")));
+            dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/uncompressed/kok-testfile.txt")));
             dos.write(output, 0, outputLength);
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             System.out.println("Error with writing file: " + ioe);
         } finally {
             assert dos != null;
@@ -98,7 +99,7 @@ public class LZ77Decompress {
     private static String convertToString(byte[] buffer, int startIndex, int count) {
         String s = "";
         for (int i = startIndex; i < startIndex + count; i++) {
-            s += (char)(buffer[i]);
+            s += (char) (buffer[i]);
         }
         return s;
     }

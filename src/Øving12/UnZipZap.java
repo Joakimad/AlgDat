@@ -1,6 +1,9 @@
 package Øving12;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -10,17 +13,20 @@ public class UnZipZap {
     private byte[] output;
     private int outputLength;
 
-    public void decompress(String filename) throws IOException {
+    public void decompress(String filename) {
 
+        // Reads file and populates input array and size of output array
         readFile(filename);
+
+        System.out.println("INPUT SIZE: " + input.length);
+        System.out.println("OUTPUT SIZE: " + output.length);
 
         for (int i = 0; i < input.length; i++) {
             byte currentByte = input[i];
             if (currentByte > 0) {
                 // Compressed data
                 byte length = currentByte;
-                byte offset = input[i++];
-
+                byte offset = input[++i];
                 int startIndex = outputLength - offset;
                 if (startIndex < 0) {
                     System.out.println("Error! Negative start index!");
@@ -39,17 +45,14 @@ public class UnZipZap {
                 // Uncompressed data
                 int length = -currentByte;
                 for (int j = i + 1; j <= i + length; j++) {
-                    output[++outputLength] = input[j];
-
-                    //out[++outputLength] = bytesFromFile[i]; // Reserve 1 byte for length
-
+                    output[outputLength++] = input[j];
                 }
                 i += length;
             } else {
                 System.out.println("Parse error.");
             }
         }
-        writeFile(filename);
+        writeFile();
     }
 
     private void readFile(String filename) {
@@ -57,20 +60,16 @@ public class UnZipZap {
         try {
             input = Files.readAllBytes(Paths.get(path));
         } catch (IOException e) {
-            System.out.println("Error reading file" + e);
+            e.printStackTrace();
         }
-        output = new byte[input.length];
+        output = new byte[input.length * 5];
     }
 
-    private void writeFile(String filename) throws IOException {
-        DataOutputStream dos = null;
-        try {
-            dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/uncompressed/" + filename)));
+    private void writeFile() {
+        try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("src/Øving12/uncompressed/testfile.txt")))) {
             dos.write(output, 0, outputLength);
         } catch (IOException e) {
-            System.out.println("Error with writing file: " + e);
-        } finally {
-            dos.close();
+            e.printStackTrace();
         }
     }
 
