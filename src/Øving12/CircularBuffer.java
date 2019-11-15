@@ -72,14 +72,6 @@ class CircularBuffer
             return ' ';
         }
     }
-    /** function to print buffer **/
-    public void display()
-    {
-        System.out.print("\nBuffer : ");
-        for (int i = 0; i < maxSize; i++)
-            System.out.print(buf[i] +" ");
-        System.out.println();
-    }
 
     public ArrayList<Integer> findLetterAll(byte search){
         ArrayList<Integer> posisjoner = new ArrayList<Integer>();
@@ -112,16 +104,12 @@ class CircularBuffer
     }
 
     public int returnPosition(int length, ArrayList<Integer> positions) {
-        if (length == 34 && (rear + maxSize - (maxSize + positions.get(0) - length)) == 33) {
-            System.out.println("here maybe");
-        }
         int pos = positions.get(0);
         if (pos-length > 0 ){
             pos = pos-length;
         }
         else {
             pos = maxSize + pos - length;
-            //System.out.println("in the else");
         }
         if( rear - pos > 0) {
             return rear - pos;
