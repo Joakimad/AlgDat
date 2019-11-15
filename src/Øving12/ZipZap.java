@@ -22,41 +22,40 @@ public class ZipZap {
         for (int i = 0; i < bytesFromFile.length; i++) {
 
             byte matchLength = 0;
-            int index_of_match = -1;
-            int encodedLength = outputLength + 2; // Reserve 2 bytes for offset and length
+            int matchIndex = -1;
+            int newOutputLength = outputLength + 2; // Reserve 2 bytes for offset and length
 
             // Searches for similar pattern 127 bytes behind itself.
             final int searchStart = Math.max(0, i - 127);
 
             // Iterate through search area.
             for (int j = searchStart; j < i; j++) {
-
-                // Check for end of file.
-                if (i + matchLength >= bytesFromFile.length) {
+                if (i + matchLength >= bytesFromFile.length)
                     break;
-                }
 
                 if (bytesFromFile[j] == bytesFromFile[i + matchLength]) {
-                    if (index_of_match == -1) {
-                        index_of_match = j;
-                    }
-
+                    if (matchIndex == -1) matchIndex = j;
                     matchLength++;
-                    bytesToFile[encodedLength++] = bytesFromFile[j];
-
-                } else if (index_of_match != -1) {
+                    if (newOutputLength >= bytesToFile.length) {
+                        System.out.println("Error");
+                    }
+                    if (j >= bytesFromFile.length) {
+                        System.out.println("Error");
+                    }
+                    bytesToFile[newOutputLength++] = bytesFromFile[j];
+                } else if (matchIndex != -1) {
                     if (matchLength >= MAX_MATCH_LENGTH) {
+                        // Long enough, return
                         break;
                     }
-
                     // Reset
-                    index_of_match = -1;
+                    matchIndex = -1;
                     matchLength = 0;
                 }
             }
 
             // Check for matches
-            if (index_of_match != -1 && matchLength >= MAX_MATCH_LENGTH) {
+            if (matchIndex != -1 && matchLength >= MAX_MATCH_LENGTH) {
                 if (uncompressedCount > 0) {
 
                     bytesToFile[uncompressedStartIndex] = (byte) -uncompressedCount;
@@ -66,8 +65,7 @@ public class ZipZap {
                 }
 
                 bytesToFile[outputLength++] = matchLength;
-
-                bytesToFile[outputLength++] = (byte) (i - index_of_match);
+                bytesToFile[outputLength++] = (byte) (i - matchIndex);
 
                 i += matchLength - 1; // -1 because i++ in for-loop
             } else {
